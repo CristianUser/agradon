@@ -2,14 +2,15 @@
 'use strict';
 
 const express = require('express'), // temporally
-  { getModels, getControllers } = require('./services/utils/helpers'),
+  _ = require('lodash'),
+  { getModels, getControllers } = require('./lib/utils'),
   { createMongooseModels } = require('./lib/model'),
-  { createDefaultCRUD } = require('./services/utils'),
+  { createDefaultCRUD } = require('./lib/crud'),
   controllers = getControllers() || {},
   entities = createMongooseModels() || {},
+  modelModules = getModels() || {},
   pkg = require('./package.json');
 
-require('./lib/model');
 function setHeaders(app) {
   app.set('x-powered-by', false);
   app.use(`${process.env.REST_PATH || ''}`, function(req, res, next) {
@@ -24,7 +25,7 @@ function setMiddlewares(app) {
 }
 
 function loadServices() {
-  require('./services/database');
+  require('./lib/services/database');
 }
 
 module.exports.init = app => {
@@ -33,7 +34,7 @@ module.exports.init = app => {
 
   for (const entity in entities) {
     const entityModel = entities[entity],
-      entityMiddleware = entities[entity].middleware || [],
+      entityMiddleware = _.get(modelModules, `${entity}.middleware`, []),
       entityRouter = express.Router();
 
     if (controllers[entity]) {
