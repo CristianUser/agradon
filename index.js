@@ -5,9 +5,30 @@ const express = require('express'), // temporally
   { getModels, getControllers } = require('./services/utils/helpers'),
   { createDefaultCRUD } = require('./services/utils'),
   controllers = getControllers() || {},
-  entities = getModels() || {};
+  entities = getModels() || {},
+  pkg = require('./package.json');
 
-module.exports = app => {
+function setHeaders(app) {
+  app.set('x-powered-by', false);
+  app.use(`${process.env.REST_PATH || ''}`, function(req, res, next) {
+    res.set('X-Powered-By', `Agradon V${pkg.version}`);
+    next();
+  });
+}
+
+function setMiddlewares(app) {
+  app.use(require('body-parser').json());
+  setHeaders(app);
+}
+
+function loadServices() {
+  require('./services/database');
+}
+
+module.exports.init = app => {
+  loadServices();
+  setMiddlewares(app);
+
   for (const entity in entities) {
     const entityModel = entities[entity].model,
       entityMiddleware = entities[entity].middleware || [],
@@ -20,6 +41,7 @@ module.exports = app => {
 
     app.use(`${process.env.REST_PATH || ''}/${entity}`, entityRouter);
   }
+  console.log(`Agradon ${pkg.version} Loaded`);
 
   return app;
 };

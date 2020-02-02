@@ -1,7 +1,7 @@
 'use strict';
 
 const _get = require('lodash/get'),
-  { createCrudHandlers } = require('./controllers');
+  { createCrudHandlers } = require('../../lib/controllers');
 
 /**
  * Create an function to remove part of string
