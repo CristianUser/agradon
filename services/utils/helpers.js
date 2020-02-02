@@ -34,10 +34,11 @@ function getEntityName(filePath) {
 /**
  * Gets file paths
  * @param {string} file
+ * @param {string} ext file extenxion
  * @returns {string[]} filePaths
  */
-function getEntityFilePath(file) {
-  return glob.sync(`${ENTITIES_PATH}/**/${file}.js`);
+function getEntityFilePath(file, ext = '.js') {
+  return glob.sync(`${ENTITIES_PATH}/**/${file}${ext}`);
 }
 
 /**
@@ -45,7 +46,7 @@ function getEntityFilePath(file) {
  * @param {string[]} filePaths
  * @returns {Object} entities
  */
-function processEntityFiles(filePaths) {
+function requireEntityFiles(filePaths) {
   return filePaths
     .map(filePath => path.resolve(filePath))
     .reduce((prev, curr) => {
@@ -56,10 +57,18 @@ function processEntityFiles(filePaths) {
 
 /**
  * Gets the models module
- * @returns {Object}
+ * @returns {string[]}
  */
 function getModels() {
-  return processEntityFiles(getEntityFilePath('model'));
+  return requireEntityFiles(getEntityFilePath('model'));
+}
+
+/**
+ * Gets the schemas
+ * @returns {Object}
+ */
+function getSchemas() {
+  return getEntityFilePath('schema', '.yml').map(filePath => path.resolve(filePath));
 }
 
 /**
@@ -67,12 +76,13 @@ function getModels() {
  * @returns {Object}
  */
 function getControllers() {
-  return processEntityFiles(getEntityFilePath('controller'));
+  return requireEntityFiles(getEntityFilePath('controller'));
 }
 
 module.exports = {
   tryRequire,
   getEntityName,
   getModels,
-  getControllers
+  getControllers,
+  getSchemas
 };

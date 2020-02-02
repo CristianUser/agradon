@@ -18,7 +18,8 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.8.5",
     "path": "^0.12.7",
-    "slash": "^3.0.0"
+    "slash": "^3.0.0",
+    "yaml": "^1.7.2"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

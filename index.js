@@ -3,11 +3,13 @@
 
 const express = require('express'), // temporally
   { getModels, getControllers } = require('./services/utils/helpers'),
+  { createMongooseModels } = require('./lib/model'),
   { createDefaultCRUD } = require('./services/utils'),
   controllers = getControllers() || {},
-  entities = getModels() || {},
+  entities = createMongooseModels() || {},
   pkg = require('./package.json');
 
+require('./lib/model');
 function setHeaders(app) {
   app.set('x-powered-by', false);
   app.use(`${process.env.REST_PATH || ''}`, function(req, res, next) {
@@ -30,7 +32,7 @@ module.exports.init = app => {
   setMiddlewares(app);
 
   for (const entity in entities) {
-    const entityModel = entities[entity].model,
+    const entityModel = entities[entity],
       entityMiddleware = entities[entity].middleware || [],
       entityRouter = express.Router();
 
