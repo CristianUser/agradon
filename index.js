@@ -4,7 +4,7 @@
 const express = require('express'), // temporally
   _ = require('lodash'),
   { getModels, getControllers } = require('./lib/utils'),
-  { createMongooseModels } = require('./lib/model'),
+  { createMongooseModels } = require('./lib/models'),
   { createDefaultCRUD } = require('./lib/crud'),
   controllers = getControllers() || {},
   entities = createMongooseModels() || {},
