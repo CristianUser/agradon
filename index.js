@@ -1,25 +1,17 @@
-/* eslint-disable guard-for-in */
 'use strict';
+const { loadEntities, loadServices, setMiddlewares } = require('./lib'),
+  pkg = require('./package.json');
 
-const express = require('express'), // temporally
-  { getModels, getControllers } = require('./services/utils/helpers'),
-  { createDefaultCRUD } = require('./services/utils'),
-  controllers = getControllers() || {},
-  entities = getModels() || {};
-
-module.exports = app => {
-  for (const entity in entities) {
-    const entityModel = entities[entity].model,
-      entityMiddleware = entities[entity].middleware || [],
-      entityRouter = express.Router();
-
-    if (controllers[entity]) {
-      controllers[entity](entityRouter, entityModel, entityMiddleware);
-    }
-    createDefaultCRUD(entityRouter, entityModel, entityMiddleware);
-
-    app.use(`${process.env.REST_PATH || ''}/${entity}`, entityRouter);
-  }
+/**
+ * Initializes Agradon
+ * @param {Express.Application} app
+ * @returns {Express.Application}
+ */
+module.exports.init = function(app) {
+  loadServices();
+  setMiddlewares(app);
+  loadEntities(app);
+  console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
 
   return app;
 };
