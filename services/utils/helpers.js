@@ -2,6 +2,7 @@
 
 const glob = require('glob'),
   path = require('path'),
+  slash = require('slash'), // has to be removed in the future
   ENTITIES_PATH = process.env.ENTITIES_PATH || 'entities';
 
 /**
@@ -20,28 +21,12 @@ function tryRequire(filePath) {
 }
 
 /**
- * Convert Windows backslash paths to slash paths: `foo\\bar` ➔ `foo/bar`.
- * @param {string} path - A Windows backslash path.
- * @returns {string} A path with forward slashes.
- */
-function standarizePath(path) {
-  const isExtendedLengthPath = /^\\\\\?\\/.test(path),
-    hasNonAscii = /[^\u0000-\u0080]+/.test(path);
-
-  if (isExtendedLengthPath || hasNonAscii) {
-    return path;
-  }
-
-  return path.replace(/\\/g, '/');
-}
-
-/**
  * Returns the name of the current entity
  * @param {string} filePath
  * @returns {string}
  */
 function getEntityName(filePath) {
-  return standarizePath(filePath)
+  return slash(filePath)
     .split('/')
     .reverse()[1];
 }
@@ -49,11 +34,10 @@ function getEntityName(filePath) {
 /**
  * Gets file paths
  * @param {string} file
- * @param {string} ext file extenxion
  * @returns {string[]} filePaths
  */
-function getEntityFilePath(file, ext = '.js') {
-  return glob.sync(`${ENTITIES_PATH}/**/${file}${ext}`);
+function getEntityFilePath(file) {
+  return glob.sync(`${ENTITIES_PATH}/**/${file}.js`);
 }
 
 /**
@@ -61,7 +45,7 @@ function getEntityFilePath(file, ext = '.js') {
  * @param {string[]} filePaths
  * @returns {Object} entities
  */
-function requireEntityFiles(filePaths) {
+function processEntityFiles(filePaths) {
   return filePaths
     .map(filePath => path.resolve(filePath))
     .reduce((prev, curr) => {
@@ -75,15 +59,7 @@ function requireEntityFiles(filePaths) {
  * @returns {Object}
  */
 function getModels() {
-  return requireEntityFiles(getEntityFilePath('model'));
-}
-
-/**
- * Gets the schemas
- * @returns {string[]}
- */
-function getSchemas() {
-  return getEntityFilePath('schema', '.yml').map(filePath => path.resolve(filePath));
+  return processEntityFiles(getEntityFilePath('model'));
 }
 
 /**
@@ -91,13 +67,12 @@ function getSchemas() {
  * @returns {Object}
  */
 function getControllers() {
-  return requireEntityFiles(getEntityFilePath('controller'));
+  return processEntityFiles(getEntityFilePath('controller'));
 }
 
 module.exports = {
   tryRequire,
   getEntityName,
   getModels,
-  getControllers,
-  getSchemas
+  getControllers
 };

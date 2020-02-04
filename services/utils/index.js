@@ -4,6 +4,17 @@ const _get = require('lodash/get'),
   { createCrudHandlers } = require('./controllers');
 
 /**
+ * Create an function to remove part of string
+ * @param {string} stringToRemove
+ * @returns {Function}
+ */
+function createRemover(stringToRemove) {
+  return function(string) {
+    return string.replace(stringToRemove, '');
+  };
+}
+
+/**
  * Returns path with param
  * @param {Object} route
  * @param {string} route.param
@@ -17,10 +28,10 @@ function getPath({ param }) {
  * Create four basic routes
  * @param {Express.Application} router
  * @param {Object} controller
- * @param {Array} middlewares
+ * @param {Array} midlewares
  * @returns {Object} router
  */
-function createCrudRoutes(router, controller, middlewares = []) {
+function createCrudRoutes(router, controller, midlewares = []) {
   const routes = [
     { method: 'get' },
     { method: 'get', handler: 'getById', param: 'id' },
@@ -34,22 +45,21 @@ function createCrudRoutes(router, controller, middlewares = []) {
     const routeHandler = _get(controller, route.handler || route.method);
 
     if (routeHandler) {
-      router[route.method](getPath(route), ...middlewares, routeHandler);
+      router[route.method](getPath(route), ...midlewares, routeHandler);
     }
   }
 
   return router;
 }
 
-/**
- * Creates default crud endpoints
- * @param {Object} router
- * @param {Object} model
- * @param {Function[]} middleware
- * @returns {Object} router
- */
-function createDefaultCRUD(router, model, middleware = []) {
-  return createCrudRoutes(router, createCrudHandlers(model), middleware);
+function setupDefaultCRUD(router) {
+  return function(model) {
+    return createDefaultCRUD(router, model);
+  };
+}
+
+function createDefaultCRUD(router, model, midleware = []) {
+  return createCrudRoutes(router, createCrudHandlers(model), midleware);
 }
 
 /**
@@ -67,6 +77,8 @@ function parseJSON(string) {
 
 module.exports = {
   parseJSON,
+  createRemover,
   createCrudRoutes,
+  setupDefaultCRUD,
   createDefaultCRUD
 };

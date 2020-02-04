@@ -99,7 +99,7 @@ function parseOp(op) {
     '>=': '$gte',
     '<': '$lt',
     '<=': '$lte',
-    '==': '$eq',
+    '=': '$eq',
     '!=': '$ne'
   };
 
@@ -217,6 +217,9 @@ function resolveArguments(query) {
 }
 
 module.exports = {
+  resolveMatch,
+  resolvePick,
+  resolveOmit,
   applyMethods,
   resolveProjection,
   resolvePagination,

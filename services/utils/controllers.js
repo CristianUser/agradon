@@ -9,7 +9,9 @@ const { resolveArguments, resolveProjection, resolvePagination, applyMethods } =
  * @returns {Promise}
  */
 function defaultResponse(toResponse, response) {
-  return toResponse.then(data => response.send(data)).catch(err => response.status(403).send(err));
+  return toResponse
+    .then(data => response.send(data))
+    .catch(err => response.sendStatus(403).send(err));
 }
 /**
  * Create basic controller handlers
