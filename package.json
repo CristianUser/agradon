@@ -1,7 +1,7 @@
 {
   "name": "agradon",
   "version": "0.0.1",
-  "description": "",
+  "description": "Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CristianUser/agradon"
+    "url": "git+https://github.com/CristianUser/agradon.git"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -31,5 +31,12 @@
     "lint-staged": "^9.5.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
+  },
+  "bugs": {
+    "url": "https://github.com/CristianUser/agradon/issues"
+  },
+  "homepage": "https://github.com/CristianUser/agradon#readme",
+  "directories": {
+    "lib": "lib"
   }
 }
