@@ -14,7 +14,6 @@
     "url": "git+https://github.com/CristianUser/agradon.git"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "lodash": "^4.17.15",
@@ -38,5 +37,15 @@
   "homepage": "https://github.com/CristianUser/agradon#readme",
   "directories": {
     "lib": "lib"
-  }
+  },
+  "keywords": [
+    "agradon",
+    "express",
+    "mongoose",
+    "mongo",
+    "crud",
+    "generator",
+    "backend",
+    "schema"
+  ]
 }
