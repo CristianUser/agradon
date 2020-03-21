@@ -89,17 +89,21 @@ export default (router, model, middleware) => {
 
 Agradon creates the routes based in the entity name.
 
-`GET`: /collection
+- `GET`: /collection
+- `GET`: /collection/:id
+- `POST`: /collection/
+- `PUT`: /collection/:id
+- `DELETE`: /collection/:id
 
-`GET`: /collection/:id
+You can set a prefix as `/api` in the config object
+Example:
 
-`POST`: /collection/
-
-`PUT`: /collection/:id
-
-`DELETE`: /collection/:id
-
-You can set a prefix as `/api` setting `REST_PATH=/api` in the environment.
+```javascript
+agradon.init({
+  app,
+  rootPath: '/api'
+});
+```
 
 ## Query System
 

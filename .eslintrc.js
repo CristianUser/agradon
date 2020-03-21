@@ -57,8 +57,6 @@ module.exports = {
     'quote-props': [2, 'as-needed'],
     'vars-on-top': 2,
     'wrap-iife': 2,
-    // strict mode
-    strict: [2, 'global'],
     // variables
     'no-unused-vars': 2,
     'no-undef': 2,
