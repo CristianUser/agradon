@@ -4,14 +4,21 @@ const { loadEntities, loadServices, setMiddlewares } = require('./lib'),
 
 /**
  * Initializes Agradon
- * @param {Express.Application} app
+ * @param {Object} config
  * @returns {Express.Application}
+ * @throws when express app is not loaded
  */
-module.exports.init = function(app) {
-  loadServices();
-  setMiddlewares(app);
-  loadEntities(app);
-  console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
+module.exports.init = function(config) {
+  const app = config.app || config || {};
+
+  if (app.use) {
+    loadServices();
+    setMiddlewares(app);
+    loadEntities(config);
+    console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
+  } else {
+    throw new Error('Is missing Express instance');
+  }
 
   return app;
 };
