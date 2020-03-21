@@ -1,15 +1,13 @@
-## What does this PR do?
+### What does this PR do?
 
 [Issue/Story](LINK_TO_STORY)
 
 ### Why are we doing this? Any context or related work?
 
-#### Where should a reviewer start?
+### Where should a reviewer start
 
-#### Related PR
+### Related PR
 
-### Manual testing steps?
+### Manual testing steps
 
-##### Screenshots (optional)
-
-### Additional Context
+### Screenshots (optional)
