@@ -12,8 +12,8 @@ module.exports.init = function(config) {
   const app = config.app || config || {};
 
   if (app.use) {
-    loadServices();
     setMiddlewares(app);
+    loadServices(app);
     loadEntities(config);
     console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
   } else {
