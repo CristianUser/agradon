@@ -4,9 +4,9 @@
 /dist
 /tmp
 /out-tsc
-informacion.js
 start.bat
 update.bat
+.eslintcache
 
 # dependencies
 /node_modules
