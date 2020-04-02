@@ -1,5 +1,6 @@
 'use strict';
-const { loadEntities, loadServices, setMiddlewares } = require('./lib'),
+const mongoose = require('mongoose'),
+  { loadEntities, loadServices, loadPlugins, setMiddlewares } = require('./lib'),
   pkg = require('./package.json');
 
 /**
@@ -12,8 +13,9 @@ module.exports.init = function(config) {
   const app = config.app || config || {};
 
   if (app.use) {
-    loadServices();
     setMiddlewares(app);
+    loadServices();
+    loadPlugins([require('./lib/services/auth')(config.auth)], app, mongoose);
     loadEntities(config);
     console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
   } else {
@@ -21,4 +23,8 @@ module.exports.init = function(config) {
   }
 
   return app;
+};
+
+module.exports.getMongoose = function() {
+  return mongoose;
 };

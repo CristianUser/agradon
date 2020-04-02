@@ -119,6 +119,19 @@ Agradon includes a powerful query system for `GET` requests
 
 Those Matchers are passed as query in get request, example `/user?match=name:john`
 
+## Authentication Module
+
+Authetication module alows you to setup your own strategies in init object
+```javascript
+agradon.init({
+  app,
+  rootPath: '/api',
+  strategies: ...
+});
+```
+
+By default we set `/auth/local` with a local strategy
+
 ### Match
 
 Match filter the results matching key:value in documents.
