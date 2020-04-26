@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose'),
   { loadEntities, loadServices, loadPlugins, setMiddlewares } = require('./lib'),
+  log = require('./lib/services/log')({ file: __filename }),
   pkg = require('./package.json');
 
 /**
@@ -17,7 +18,7 @@ module.exports.init = function(config) {
     loadServices();
     loadPlugins([require('./lib/services/auth')(config.auth)], app, mongoose);
     loadEntities(config);
-    console.log(`Agradon ${pkg.version} Loaded 👀 ⭐️`);
+    log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
   } else {
     throw new Error('Is missing Express instance');
   }
