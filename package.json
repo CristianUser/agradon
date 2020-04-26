@@ -1,6 +1,6 @@
 {
   "name": "agradon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "url": "git+https://github.com/CristianUser/agradon.git"
   },
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "glob": "^7.1.6",

@@ -17,18 +17,16 @@ Initialize **Agradon**
 Set `MONGODB_URI` environment variable and import `agradon` in your app index.
 
 ```javascript
-import express from 'express';
-import * as agradon from 'agradon';
+const express = require('express');
+const agradon = require('agradon');
 const app = express();
 
 agradon.init(app);
 
 app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}`));
 
-export default app;
+module.exports = app;
 ```
-
-> Hint: If you are using `ES6 or higher` with `BABEL` you should add this plugin [babel-plugin-add-module-exports](https://www.npmjs.com/package/babel-plugin-add-module-exports).
 
 ## Entities
 
@@ -62,12 +60,12 @@ _options:
 Model file used to set `virtual`, `hooks` and schema methods. You also can register middlewares to default routes or to be used in controller file.
 
 ```javascript
-export const schema = schema => {
+module.exports.schema = schema => {
   // Code live here
   return schema;
 };
 
-export const middleware = [];
+module.exports.middleware = [];
 ```
 
 ### controller.js
@@ -75,7 +73,7 @@ export const middleware = [];
 Controller file is used to create custom endpoints or add middlewares to the default endpoints.
 
 ```javascript
-export default (router, model, middleware) => {
+module.exports = (router, model, middleware) => {
   router.get('/', (req, res) => {
     return model.find({}).then(result => {
       res.send(result);
@@ -89,11 +87,11 @@ export default (router, model, middleware) => {
 
 Agradon creates the routes based in the entity name.
 
-- `GET`: /collection
-- `GET`: /collection/:id
-- `POST`: /collection/
-- `PUT`: /collection/:id
-- `DELETE`: /collection/:id
+- GET: `/:collection`
+- GET: `/:collection/:id`
+- POST: `/:collection/`
+- PUT: `/:collection/:id`
+- DELETE: `/:collection/:id`
 
 You can set a prefix as `/api` in the config object
 Example:
@@ -104,6 +102,20 @@ agradon.init({
   rootPath: '/api'
 });
 ```
+
+## Authentication Module
+
+Authetication module alows you to setup your own strategies in init object
+
+```javascript
+agradon.init({
+  app,
+  rootPath: '/api',
+  strategies: ...
+});
+```
+
+By default we set `/auth/local` with a local strategy
 
 ## Query System
 
@@ -118,19 +130,6 @@ Agradon includes a powerful query system for `GET` requests
 - Populate
 
 Those Matchers are passed as query in get request, example `/user?match=name:john`
-
-## Authentication Module
-
-Authetication module alows you to setup your own strategies in init object
-```javascript
-agradon.init({
-  app,
-  rootPath: '/api',
-  strategies: ...
-});
-```
-
-By default we set `/auth/local` with a local strategy
 
 ### Match
 
