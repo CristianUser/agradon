@@ -105,17 +105,34 @@ agradon.init({
 
 ## Authentication Module
 
-Authetication module alows you to setup your own strategies in init object
+### How to setup
+
+To enable authetication module follow the example bellow. This module is configurable, so you can pass your own strategies to interact with db
 
 ```javascript
 agradon.init({
   app,
   rootPath: '/api',
-  strategies: ...
+  plugins: [
+    require('agradon/auth')()
+  ]
 });
 ```
 
 By default we set `/auth/local` with a local strategy
+
+### Auth Guards
+
+The guards are created to protect the crud routes. guards are set in `schema.yml` by http method/action in db.
+
+```yaml
+...
+_auth:
+  get: true
+  post: true
+  put: true
+  delete: true
+```
 
 ## Query System
 
