@@ -1,5 +1,5 @@
 const verifyAuth = require('./utils').verifyAuth,
-  log = require('../log')({ file: __filename });
+  log = require('../lib/services/log')({ file: __filename });
 
 module.exports = (router, schemas, rootPath) => {
   const schemaList = Object.keys(schemas),

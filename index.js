@@ -16,7 +16,7 @@ module.exports.init = function(config) {
   if (app.use) {
     setMiddlewares(app);
     loadServices();
-    loadPlugins([require('./lib/services/auth')(config.auth)], app, mongoose, config);
+    loadPlugins(config.plugins, app, mongoose, config);
     registerRoutes(config);
     log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
   } else {
