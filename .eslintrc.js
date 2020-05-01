@@ -86,7 +86,6 @@ module.exports = {
     'no-trailing-spaces': 2,
     'no-underscore-dangle': 0,
     'no-unneeded-ternary': 1,
-    'one-var': 2,
     quotes: [2, 'single', 'avoid-escape'],
     semi: [2, 'always'],
     'keyword-spacing': 2,

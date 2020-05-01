@@ -1,6 +1,6 @@
 const verifyAuth = require('./utils').verifyAuth;
 
-module.exports = (router, schemas, rootPath) => {
+module.exports = (router, schemas, rootPath = '') => {
   const schemaList = Object.keys(schemas),
     routes = [
       { method: 'get' },
