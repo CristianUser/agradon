@@ -1,5 +1,4 @@
-const verifyAuth = require('./utils').verifyAuth,
-  log = require('../lib/services/log')({ file: __filename });
+const verifyAuth = require('./utils').verifyAuth;
 
 module.exports = (router, schemas, rootPath) => {
   const schemaList = Object.keys(schemas),
@@ -19,10 +18,8 @@ module.exports = (router, schemas, rootPath) => {
         if (schemaAuthConfig[method]) {
           if (param) {
             router[method](`${rootPath}/${schemaName}/:${param}`, verifyAuth());
-            log.debug(`Guard for "${method}" '${rootPath}/${schemaName}/:${param}'`);
           } else {
             router[method](`${rootPath}/${schemaName}`, verifyAuth());
-            log.debug(`Guard for "${method}" '${rootPath}/${schemaName}'`);
           }
         }
       });

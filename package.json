@@ -41,7 +41,8 @@
   },
   "homepage": "https://github.com/CristianUser/agradon#readme",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "auth": "auth"
   },
   "keywords": [
     "agradon",
