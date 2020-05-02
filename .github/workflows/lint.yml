@@ -20,7 +20,7 @@ jobs:
         env:
           CI: true
         run: npm install
-      - name: Run Unit Tests
+      - name: Lint JS
         env:
           CI: true
-        run: npm test
+        run: npm run lint
