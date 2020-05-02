@@ -1,5 +1,12 @@
 const verifyAuth = require('./utils').verifyAuth;
 
+/**
+ * Set auth middleware to protect endpoints
+ *
+ * @param {object} router
+ * @param {object} schemas
+ * @param {string} rootPath
+ */
 module.exports = (router, schemas, rootPath = '') => {
   const schemaList = Object.keys(schemas),
     routes = [

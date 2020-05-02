@@ -13,6 +13,13 @@ function registerStrategies(strategies = []) {
   });
 }
 
+/**
+ * Merges strategies without repeating the same twice
+ *
+ * @param {object[]} strategies
+ * @param {object[]} newStrategies
+ * @returns {object[]} merged result
+ */
 function mergeStrategies(strategies, newStrategies) {
   if (newStrategies) {
     newStrategies.forEach(strategy => {

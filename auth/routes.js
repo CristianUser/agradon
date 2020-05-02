@@ -36,6 +36,11 @@ function localRoute(req, res) {
   })(req, res);
 }
 
+/**
+ * Register routes on router
+ *
+ * @param {object} router
+ */
 module.exports = function(router) {
   /* POST login. */
   router.post('/auth/local', localRoute);

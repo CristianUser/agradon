@@ -1,4 +1,3 @@
-/* eslint-disable one-var */
 const LocalStrategy = require('passport-local').Strategy,
   ExtractJWT = require('passport-jwt').ExtractJwt,
   JWTStrategy = require('passport-jwt').Strategy,
