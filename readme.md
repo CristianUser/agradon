@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/CristianUser/agradon/badge.svg?branch=master)](https://coveralls.io/github/CristianUser/agradon?branch=master)
 
-Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.
+Extensible Express middleware for automatic generation of the models, controllers, and routes with MongoDB.
 
 ## Getting started
 
@@ -28,6 +28,23 @@ agradon.init(app);
 app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}`));
 
 module.exports = app;
+```
+
+Agradon also support plugins for increase functionality.
+
+Plugin Example:
+
+```javascript
+function customPlugin(router, mongoose, schemas) {
+  // Code live here
+  ...
+}
+
+
+const config = {
+  app,
+  plugins: [customPlugin]
+}
 ```
 
 ## Entities
@@ -59,7 +76,7 @@ _options:
 
 ### model.js
 
-Model file used to set `virtual`, `hooks` and schema methods. You also can register middlewares to default routes or to be used in controller file.
+Model file used to set `virtual`, `hooks`, etc. You also can register middlewares to default routes or to be used in controller file.
 
 ```javascript
 module.exports.schema = schema => {
@@ -85,31 +102,13 @@ module.exports = (router, model, middleware) => {
 };
 ```
 
-## Routing
-
-Agradon creates the routes based in the entity name.
-
-- GET: `/:collection`
-- GET: `/:collection/:id`
-- POST: `/:collection/`
-- PUT: `/:collection/:id`
-- DELETE: `/:collection/:id`
-
-You can set a prefix as `/api` in the config object
-Example:
-
-```javascript
-agradon.init({
-  app,
-  rootPath: '/api'
-});
-```
-
 ## Authentication Module
+
+Agradon includes a configurable authentication plugin
 
 ### How to setup
 
-To enable authetication module follow the example bellow. This module is configurable, so you can pass your own strategies to interact with db
+To enable authetication module follow the example bellow. This module is configurable, so you can pass your own strategies to interact with db.
 
 ```javascript
 agradon.init({
@@ -134,6 +133,26 @@ _auth:
   post: true
   put: true
   delete: true
+```
+
+## Routing
+
+Agradon creates the routes based in the entity name.
+
+- GET: `/:collection`
+- GET: `/:collection/:id`
+- POST: `/:collection/`
+- PUT: `/:collection/:id`
+- DELETE: `/:collection/:id`
+
+You can set a prefix as `/api` in the config object
+Example:
+
+```javascript
+agradon.init({
+  app,
+  rootPath: '/api'
+});
 ```
 
 ## Query System
