@@ -1,6 +1,8 @@
 # Agradon
 
-Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.
+[![Coverage Status](https://coveralls.io/repos/github/CristianUser/agradon/badge.svg?branch=master)](https://coveralls.io/github/CristianUser/agradon?branch=master)
+
+Extensible Express middleware for automatic generation of the models, controllers, and routes with MongoDB.
 
 ## Getting started
 
@@ -26,6 +28,23 @@ agradon.init(app);
 app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}`));
 
 module.exports = app;
+```
+
+Agradon also support plugins for increase functionality.
+
+Plugin Example:
+
+```javascript
+function customPlugin(router, mongoose, schemas) {
+  // Code live here
+  ...
+}
+
+
+const config = {
+  app,
+  plugins: [customPlugin]
+}
 ```
 
 ## Entities
@@ -57,7 +76,7 @@ _options:
 
 ### model.js
 
-Model file used to set `virtual`, `hooks` and schema methods. You also can register middlewares to default routes or to be used in controller file.
+Model file used to set `virtual`, `hooks`, etc. You also can register middlewares to default routes or to be used in controller file.
 
 ```javascript
 module.exports.schema = schema => {
@@ -83,6 +102,39 @@ module.exports = (router, model, middleware) => {
 };
 ```
 
+## Authentication Module
+
+Agradon includes a configurable authentication plugin
+
+### How to setup
+
+To enable authetication module follow the example bellow. This module is configurable, so you can pass your own strategies to interact with db.
+
+```javascript
+agradon.init({
+  app,
+  rootPath: '/api',
+  plugins: [
+    require('agradon/auth')()
+  ]
+});
+```
+
+By default we set `/auth/local` with a local strategy
+
+### Auth Guards
+
+The guards are created to protect the crud routes. guards are set in `schema.yml` by http method/action in db.
+
+```yaml
+...
+_auth:
+  get: true
+  post: true
+  put: true
+  delete: true
+```
+
 ## Routing
 
 Agradon creates the routes based in the entity name.
@@ -102,20 +154,6 @@ agradon.init({
   rootPath: '/api'
 });
 ```
-
-## Authentication Module
-
-Authetication module alows you to setup your own strategies in init object
-
-```javascript
-agradon.init({
-  app,
-  rootPath: '/api',
-  strategies: ...
-});
-```
-
-By default we set `/auth/local` with a local strategy
 
 ## Query System
 
