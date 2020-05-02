@@ -1,5 +1,7 @@
 # Agradon
 
+[![Coverage Status](https://coveralls.io/repos/github/CristianUser/agradon/badge.svg?branch=master)](https://coveralls.io/github/CristianUser/agradon?branch=master)
+
 Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.
 
 ## Getting started
