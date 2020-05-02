@@ -24,7 +24,7 @@ describe('auth/strategies.js', () => {
       const user = { username: 'user' };
 
       mockModel('findOne', jest.fn().mockResolvedValue(user));
-      strategies.localStrategyFunc('user', 'pass', cb).then(() => {
+      return strategies.localStrategyFunc('user', 'pass', cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toBeNull();
         expect(cb.mock.calls[0][1]).toEqual(user);
@@ -33,7 +33,7 @@ describe('auth/strategies.js', () => {
 
     test('should reject and call cb once with error', () => {
       mockModel('findOne', jest.fn().mockRejectedValue(error));
-      strategies.localStrategyFunc('user', 'pass', cb).then(() => {
+      return strategies.localStrategyFunc('user', 'pass', cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toEqual(error);
       });
@@ -41,7 +41,7 @@ describe('auth/strategies.js', () => {
 
     test("should't find the user ", () => {
       mockModel('findOne', jest.fn().mockResolvedValue(null));
-      strategies.localStrategyFunc('user', 'pass', cb).then(() => {
+      return strategies.localStrategyFunc('user', 'pass', cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toBeNull();
         expect(cb.mock.calls[0][1]).toBeFalsy();
@@ -56,7 +56,7 @@ describe('auth/strategies.js', () => {
 
       mockModel('findById', jest.fn().mockResolvedValue(user));
 
-      strategies.jwtFunc(payload, cb).then(() => {
+      return strategies.jwtFunc(payload, cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toBeNull();
         expect(cb.mock.calls[0][1]).toEqual(user);
@@ -67,7 +67,7 @@ describe('auth/strategies.js', () => {
       const payload = { id: 'someid' };
 
       mockModel('findById', jest.fn().mockRejectedValue(error));
-      strategies.jwtFunc(payload, cb).then(() => {
+      return strategies.jwtFunc(payload, cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toEqual(error);
       });
