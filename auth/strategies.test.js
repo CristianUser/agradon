@@ -14,6 +14,11 @@ function mockModel(method, fn) {
 }
 
 describe('auth/strategies.js', () => {
+  describe('default module', () => {
+    test('should return strategies', () => {
+      expect(strategies().length).toBe(2);
+    });
+  });
   describe('localStrategyFunc', () => {
     test('should call cb once', () => {
       const user = { username: 'user' };
@@ -51,7 +56,7 @@ describe('auth/strategies.js', () => {
 
       mockModel('findById', jest.fn().mockResolvedValue(user));
 
-      strategies.jwtFunc(payload).then(() => {
+      strategies.jwtFunc(payload, cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toBeNull();
         expect(cb.mock.calls[0][1]).toEqual(user);
@@ -62,7 +67,7 @@ describe('auth/strategies.js', () => {
       const payload = { id: 'someid' };
 
       mockModel('findById', jest.fn().mockRejectedValue(error));
-      strategies.jwtFunc(payload).then(() => {
+      strategies.jwtFunc(payload, cb).then(() => {
         expect(cb.mock.calls.length).toBe(1);
         expect(cb.mock.calls[0][0]).toEqual(error);
       });
