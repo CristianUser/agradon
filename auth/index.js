@@ -1,6 +1,7 @@
 const passport = require('passport'),
   routes = require('./routes'),
-  guard = require('./guard');
+  guard = require('./guard'),
+  defaultStrategies = require('./strategies');
 
 /**
  * Register strategies in the passport instance
@@ -12,20 +13,9 @@ function registerStrategies(strategies = []) {
   });
 }
 
-module.exports = (config = {}) => {
-  const _config = Object.assign(
-    {
-      strategies: require('./strategies'),
-      userModel: 'User',
-      enableRoutes: true
-    },
-    config
-  );
-
-  if (config.strategies) {
-    const strategies = require('./strategies');
-
-    config.strategies.forEach(strategy => {
+function mergeStrategies(strategies, newStrategies) {
+  if (newStrategies) {
+    newStrategies.forEach(strategy => {
       const index = strategies.findIndex(_strategy => _strategy.name === strategy.name);
 
       if (index >= 0) {
@@ -34,11 +24,23 @@ module.exports = (config = {}) => {
         strategies.push(strategy);
       }
     });
-
-    _config.strategies = strategies;
   }
+  return strategies;
+}
 
-  return (app, db, schemas, { rootPath }) => {
+module.exports = (config = {}) => {
+  const _config = Object.assign(
+    {
+      strategies: defaultStrategies(),
+      userModel: 'User',
+      enableRoutes: true
+    },
+    config
+  );
+
+  _config.strategies = mergeStrategies(defaultStrategies(), config.strategies);
+
+  return (app, db, schemas, { rootPath } = {}) => {
     registerStrategies(_config.strategies);
     guard(app, schemas, rootPath);
 
@@ -47,3 +49,7 @@ module.exports = (config = {}) => {
     }
   };
 };
+
+// for testing
+module.exports.mergeStrategies = mergeStrategies;
+module.exports.registerStrategies = registerStrategies;
