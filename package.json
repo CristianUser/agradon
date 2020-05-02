@@ -27,6 +27,7 @@
     "yaml": "^1.7.2"
   },
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
