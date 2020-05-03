@@ -1,6 +1,9 @@
 'use strict';
 const mongoose = require('mongoose'),
-  { registerRoutes, loadServices, registerPlugins, setMiddlewares } = require('./lib'),
+  { registerRoutes, registerPlugins, setMiddlewares } = require('./lib'),
+  { createMongooseModels } = require('./lib/models'),
+  entitites = createMongooseModels(),
+  db = require('./lib/services/database'),
   log = require('./lib/services/log')({ file: __filename }),
   pkg = require('./package.json');
 
@@ -15,10 +18,12 @@ module.exports.init = function(config) {
 
   if (app.use) {
     setMiddlewares(app);
-    loadServices();
-    registerPlugins(config.plugins, app, mongoose, config);
-    registerRoutes(config);
-    log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
+
+    db().then(() => {
+      registerPlugins(config.plugins, app, mongoose, config);
+      registerRoutes(config, entitites);
+      log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
+    });
   } else {
     throw new Error('Is missing Express instance');
   }
