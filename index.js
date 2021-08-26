@@ -10,7 +10,7 @@ const mongoose = require('mongoose'),
 /**
  * Initializes Agradon
  * @param {Object} config
- * @returns {Express.Application}
+ * @returns {Promise<Express.Application>}
  * @throws when express app is not loaded
  */
 module.exports.init = function(config) {
@@ -19,14 +19,13 @@ module.exports.init = function(config) {
   if (app.use) {
     setMiddlewares(app);
 
-    db().then(() => {
+    return db().then(() => {
       registerPlugins(config.plugins, app, mongoose, config);
       registerRoutes(config, entitites);
       log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
+      return app;
     });
   } else {
     throw new Error('Is missing Express instance');
   }
-
-  return app;
 };
