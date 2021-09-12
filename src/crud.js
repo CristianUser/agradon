@@ -1,7 +1,5 @@
-'use strict';
-
-const _get = require('lodash/get'),
-  { createCrudHandlers } = require('./controllers');
+const _get = require('lodash/get');
+const { createCrudHandlers } = require('./controllers');
 
 /**
  * Returns path with param

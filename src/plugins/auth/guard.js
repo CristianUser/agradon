@@ -1,4 +1,4 @@
-const verifyAuth = require('./utils').verifyAuth;
+const { verifyAuth } = require('./utils');
 
 /**
  * Set auth middleware to protect endpoints
@@ -8,16 +8,16 @@ const verifyAuth = require('./utils').verifyAuth;
  * @param {string} rootPath
  */
 module.exports = (router, schemas, rootPath = '') => {
-  const schemaList = Object.keys(schemas),
-    routes = [
-      { method: 'get' },
-      { method: 'post' },
-      { method: 'get', param: 'id' },
-      { method: 'put', param: 'id' },
-      { method: 'delete', param: 'id' }
-    ];
+  const schemaList = Object.keys(schemas);
+  const routes = [
+    { method: 'get' },
+    { method: 'post' },
+    { method: 'get', param: 'id' },
+    { method: 'put', param: 'id' },
+    { method: 'delete', param: 'id' }
+  ];
 
-  schemaList.forEach(schemaName => {
+  schemaList.forEach((schemaName) => {
     const schemaAuthConfig = schemas[schemaName]._auth;
 
     if (schemaAuthConfig) {

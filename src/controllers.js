@@ -1,5 +1,3 @@
-'use strict';
-
 const { resolveArguments, resolveProjection, resolvePagination, applyMethods } = require('./query');
 
 /**
@@ -9,7 +7,9 @@ const { resolveArguments, resolveProjection, resolvePagination, applyMethods } =
  * @returns {Promise}
  */
 function defaultResponse(toResponse, response) {
-  return toResponse.then(data => response.send(data)).catch(err => response.status(403).send(err));
+  return toResponse
+    .then((data) => response.send(data))
+    .catch((err) => response.status(403).send(err));
 }
 /**
  * Create basic controller handlers
@@ -26,7 +26,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.post = function({ body }, res) {
+  controller.post = function ({ body }, res) {
     const newDocument = new model(body);
 
     return defaultResponse(newDocument.save(), res);
@@ -39,10 +39,10 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.get = function({ query }, res) {
-    const args = resolveArguments(query),
-      projection = resolveProjection(query),
-      options = resolvePagination(query);
+  controller.get = function ({ query }, res) {
+    const args = resolveArguments(query);
+    const projection = resolveProjection(query);
+    const options = resolvePagination(query);
 
     return defaultResponse(applyMethods(query, model.find(args, projection, options)), res);
   };
@@ -54,7 +54,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.getById = function({ params, query }, res) {
+  controller.getById = function ({ params, query }, res) {
     return defaultResponse(applyMethods(query, model.findById(params.id)), res);
   };
 
@@ -65,7 +65,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.put = function({ body, params }, res) {
+  controller.put = function ({ body, params }, res) {
     return defaultResponse(model.updateOne({ _id: params.id }, body), res);
   };
 
@@ -76,7 +76,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.delete = function({ params }, res) {
+  controller.delete = function ({ params }, res) {
     return defaultResponse(model.deleteOne({ _id: params.id }), res);
   };
 

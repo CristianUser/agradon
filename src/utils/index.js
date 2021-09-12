@@ -1,8 +1,7 @@
-'use strict';
+const glob = require('glob');
+const path = require('path');
 
-const glob = require('glob'),
-  path = require('path'),
-  ENTITIES_PATH = process.env.ENTITIES_PATH || 'entities';
+const ENTITIES_PATH = process.env.ENTITIES_PATH || 'entities';
 
 /**
  * Try to require a filePath
@@ -25,8 +24,8 @@ function tryRequire(filePath) {
  * @returns {string} A path with forward slashes.
  */
 function standarizePath(path) {
-  const isExtendedLengthPath = /^\\\\\?\\/.test(path),
-    hasNonAscii = /[^\u0000-\u0080]+/.test(path);
+  const isExtendedLengthPath = /^\\\\\?\\/.test(path);
+  const hasNonAscii = /[^\u0000-\u0080]+/.test(path);
 
   if (isExtendedLengthPath || hasNonAscii) {
     return path;
@@ -41,9 +40,7 @@ function standarizePath(path) {
  * @returns {string}
  */
 function getEntityName(filePath) {
-  return standarizePath(filePath)
-    .split('/')
-    .reverse()[1];
+  return standarizePath(filePath).split('/').reverse()[1];
 }
 
 /**
@@ -63,7 +60,7 @@ function getEntityFilePath(file, ext = '.js') {
  */
 function requireEntityFiles(filePaths) {
   return filePaths
-    .map(filePath => path.resolve(filePath))
+    .map((filePath) => path.resolve(filePath))
     .reduce((prev, curr) => {
       prev[getEntityName(curr)] = tryRequire(curr);
       return prev;
@@ -83,7 +80,7 @@ function getModels() {
  * @returns {string[]} path array
  */
 function getSchemas() {
-  return getEntityFilePath('schema', '.yml').map(filePath => path.resolve(filePath));
+  return getEntityFilePath('schema', '.yml').map((filePath) => path.resolve(filePath));
 }
 
 /**
@@ -108,7 +105,7 @@ function toPascalCase(text) {
       ($1, $2, $3) => `${$2.toUpperCase() + $3.toLowerCase()}`
     )
     .replace(new RegExp(/\s/, 'g'), '')
-    .replace(new RegExp(/\w/), s => s.toUpperCase());
+    .replace(new RegExp(/\w/), (s) => s.toUpperCase());
 }
 
 /**

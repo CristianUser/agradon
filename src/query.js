@@ -1,5 +1,5 @@
-const _ = require('lodash'),
-  { parseJSON } = require('./utils');
+const _ = require('lodash');
+const { parseJSON } = require('./utils');
 
 /**
  * Return params without unsupported characters
@@ -21,9 +21,8 @@ function sanitizeText(string) {
 function getQueryParam(query, param, splitBy) {
   if (_.isArray(query[param])) {
     return query[param];
-  } else {
-    return _.get(query, param) ? _.get(query, param).split(splitBy) : '';
   }
+  return _.get(query, param) ? _.get(query, param).split(splitBy) : '';
 }
 
 /**
@@ -107,10 +106,10 @@ function parseOp(op) {
 function resolveCompare(query) {
   const conditionals = getQueryParam(query, 'compare') || [];
 
-  if (conditionals.every(cond => cond.split(':').length >= 3)) {
+  if (conditionals.every((cond) => cond.split(':').length >= 3)) {
     return conditionals.reduce((prev, curr) => {
-      const [key, operator] = curr.split(':'),
-        value = _.drop(curr.split(':'), 2).join(':');
+      const [key, operator] = curr.split(':');
+      const value = _.drop(curr.split(':'), 2).join(':');
 
       _.set(prev, `${key}.${parseOp(operator)}`, parseJSON(value));
 
@@ -122,8 +121,8 @@ function resolveCompare(query) {
 }
 
 function resolvePagination(query) {
-  const limit = parseInt(_.get(query, 'perPage') || _.get(query, 'limit')),
-    page = _.get(query, 'page', 1);
+  const limit = parseInt(_.get(query, 'perPage') || _.get(query, 'limit'));
+  const page = _.get(query, 'page', 1);
 
   if (limit) {
     return {
@@ -159,7 +158,7 @@ function parseQueryMethod(query, prop, parser) {
  * @returns {object}
  */
 function getToPopulate(query) {
-  return parseQueryMethod(query, 'populate', element => {
+  return parseQueryMethod(query, 'populate', (element) => {
     const result = sanitizeText(element.replace(/\(|\)/g, ',')).split(',');
 
     return { path: result[0], select: _.drop(_.compact(result)) };
@@ -172,9 +171,9 @@ function getToPopulate(query) {
  * @returns {object}
  */
 function getToSort(query) {
-  return parseQueryMethod(query, 'sort', element => {
-    const [field, value] = element.split(':'),
-      obj = {};
+  return parseQueryMethod(query, 'sort', (element) => {
+    const [field, value] = element.split(':');
+    const obj = {};
 
     obj[field] = value;
     return obj;
@@ -190,10 +189,10 @@ function getToSort(query) {
 function applyMethods(query, mongoQuery) {
   const toApply = _.merge(getToSort(query), getToPopulate(query));
 
-  Object.keys(toApply).forEach(key => {
+  Object.keys(toApply).forEach((key) => {
     const values = toApply[key];
 
-    values.forEach(value => {
+    values.forEach((value) => {
       mongoQuery[key](value);
     });
   });

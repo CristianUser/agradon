@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+/lib
 /out-tsc
 start.bat
 update.bat

@@ -2,7 +2,7 @@ require('colors');
 
 function printContext(context) {
   if (context) {
-    Object.keys(context).forEach(key => {
+    Object.keys(context).forEach((key) => {
       console.log(`      ${key}:`, context[key]);
     });
   }

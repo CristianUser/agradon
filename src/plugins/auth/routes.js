@@ -24,7 +24,7 @@ function localRoute(req, res) {
       });
     }
 
-    req.login(user, { session: false }, err => {
+    req.login(user, { session: false }, (err) => {
       if (err) {
         return res.send(err);
       }
@@ -41,7 +41,7 @@ function localRoute(req, res) {
  *
  * @param {object} router
  */
-module.exports = function(router) {
+module.exports = function (router) {
   /* POST login. */
   router.post('/auth/local', localRoute);
 };
