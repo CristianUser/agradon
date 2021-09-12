@@ -1,11 +1,13 @@
 'use strict';
 const mongoose = require('mongoose'),
-  { registerRoutes, registerPlugins, setMiddlewares } = require('./lib'),
-  { createMongooseModels } = require('./lib/models'),
+  { registerRoutes, registerPlugins, setMiddlewares } = require('./src'),
+  { createMongooseModels } = require('./src/models'),
   entitites = createMongooseModels(),
-  db = require('./lib/services/database'),
-  log = require('./lib/services/log')({ file: __filename }),
+  db = require('./src/services/database'),
+  log = require('./src/services/log')({ file: __filename }),
   pkg = require('./package.json');
+
+const { readDirectory } = require('./src/services/files.ts');
 
 /**
  * Initializes Agradon
@@ -13,11 +15,13 @@ const mongoose = require('mongoose'),
  * @returns {Promise<Express.Application>}
  * @throws when express app is not loaded
  */
-module.exports.init = function(config) {
+module.exports.init = function(config: any) {
   const app = config.app || config || {};
 
   if (app.use) {
     setMiddlewares(app);
+
+    readDirectory('src/entities');
 
     return db().then(() => {
       registerPlugins(config.plugins, app, mongoose, config);
