@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
-
 jest.mock('./controllers');
 
+const controllers = require('./controllers');
 const crud = require('./crud'),
-  controllers = require('./controllers'),
   controller = {
     get: jest.fn(),
     getById: jest.fn(),

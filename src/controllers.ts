@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 const { resolveArguments, resolveProjection, resolvePagination, applyMethods } = require('./query');
 
 /**
@@ -6,18 +8,18 @@ const { resolveArguments, resolveProjection, resolvePagination, applyMethods } =
  * @param {Object} response
  * @returns {Promise}
  */
-function defaultResponse(toResponse, response) {
+export function defaultResponse(toResponse: any, response: any) {
   return toResponse
-    .then((data) => response.send(data))
-    .catch((err) => response.status(403).send(err));
+    .then((data: any) => response.send(data))
+    .catch((err: any) => response.status(403).send(err));
 }
 /**
  * Create basic controller handlers
  * @param {Object} model
  * @returns {Object} controller
  */
-function createCrudHandlers(model) {
-  const controller = {};
+export function createCrudHandlers(model: Model<any>) {
+  const controller: any = {};
 
   /**
    * Add a new model to mongoDB
@@ -26,7 +28,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.post = function ({ body }, res) {
+  controller.post = function({ body }: any, res: any) {
     const newDocument = new model(body);
 
     return defaultResponse(newDocument.save(), res);
@@ -39,7 +41,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.get = function ({ query }, res) {
+  controller.get = function({ query }: any, res: any) {
     const args = resolveArguments(query);
     const projection = resolveProjection(query);
     const options = resolvePagination(query);
@@ -54,7 +56,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.getById = function ({ params, query }, res) {
+  controller.getById = function({ params, query }: any, res: any) {
     return defaultResponse(applyMethods(query, model.findById(params.id)), res);
   };
 
@@ -65,7 +67,7 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.put = function ({ body, params }, res) {
+  controller.put = function({ body, params }: any, res: any) {
     return defaultResponse(model.updateOne({ _id: params.id }, body), res);
   };
 
@@ -76,14 +78,9 @@ function createCrudHandlers(model) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.delete = function ({ params }, res) {
+  controller.delete = ({ params }: any, res: any) => {
     return defaultResponse(model.deleteOne({ _id: params.id }), res);
   };
 
   return controller;
 }
-
-module.exports = {
-  createCrudHandlers,
-  defaultResponse
-};

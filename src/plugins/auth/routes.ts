@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import { Router } from 'express';
 
 /**
  * Register OAuth routes by provider
@@ -7,7 +8,7 @@ const passport = require('passport');
  * @param {object} router
  * @param {string} provider
  */
-function createRoutesByProvider(router, provider) {
+export function createRoutesByProvider(router: Router, provider: string) {
   router.get(`/auth/${provider}`, passport.authenticate(provider));
   router.get(
     `/auth/${provider}/callback`,
@@ -15,7 +16,7 @@ function createRoutesByProvider(router, provider) {
   );
 }
 
-function localRoute(req, res) {
+export function localRoute(req: any, res: any) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err || !user) {
       return res.status(400).json({
@@ -24,7 +25,7 @@ function localRoute(req, res) {
       });
     }
 
-    req.login(user, { session: false }, (err) => {
+    req.login(user, { session: false }, (err: any) => {
       if (err) {
         return res.send(err);
       }
@@ -39,13 +40,9 @@ function localRoute(req, res) {
 /**
  * Register routes on router
  *
- * @param {object} router
+ * @param {Router} router
  */
-module.exports = function (router) {
+export default (router: Router) => {
   /* POST login. */
   router.post('/auth/local', localRoute);
 };
-
-// for testing
-module.exports.createRoutesByProvider = createRoutesByProvider;
-module.exports.localRoute = localRoute;

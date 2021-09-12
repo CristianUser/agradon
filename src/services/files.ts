@@ -1,9 +1,10 @@
+import _ from 'lodash';
+import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
-import fs from 'fs';
 import jsYaml from 'js-yaml';
-import _ from 'lodash';
 
+let entitiesFileSet = {};
 const loadYaml = (filePath: string) => jsYaml.load(fs.readFileSync(filePath, 'utf8'));
 const EXTENSION_LOADER: any = {
   '.yaml': loadYaml,
@@ -30,6 +31,7 @@ export interface FileGroup<T = any> {
 
 export function readDirectory(entitiesPath: string): EntitiesFileSet {
   const entities = {};
+
   glob.sync(`${entitiesPath}/**/*.*`).forEach((file) => {
     const resolvedPath = path.resolve(file);
     const { dir, ext, name } = path.parse(file);
@@ -39,6 +41,7 @@ export function readDirectory(entitiesPath: string): EntitiesFileSet {
     _.set(entities, [entityName, fileName], EXTENSION_LOADER[ext](resolvedPath));
   });
 
+  entitiesFileSet = entities
   return entities;
 }
 
@@ -47,4 +50,8 @@ export function getFileGroup(fileSets: EntitiesFileSet, fileName: string): FileG
     prev[entityName] = fileSet[fileName];
     return prev;
   }, {});
+}
+
+export function getModels() {
+  return getFileGroup(entitiesFileSet, 'model');
 }

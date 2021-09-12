@@ -1,12 +1,10 @@
-/* eslint-disable guard-for-in */
+import _ from 'lodash';
+import mongoose, { Schema } from 'mongoose';
+import { FileGroup, getModels } from './services/files';
+import { createLogger } from './services/log';
+import { toPascalCase } from './utils';
 
-import { Schema } from 'mongoose';
-import { FileGroup } from './services/files';
-
-const _ = require('lodash');
-const mongoose = require('mongoose');
-const log = require('./services/log')({ file: __filename });
-const { getModels, toPascalCase } = require('./utils');
+const log = createLogger({ file: __filename });
 
 /**
  * returns the field type
@@ -14,14 +12,14 @@ const { getModels, toPascalCase } = require('./utils');
  * @returns {string} typeClass
  */
 function getSchemaType(type: string | Array<string>) {
-  const { Decimal128, Mixed, ObjectId } = mongoose.Types;
+  const { Decimal128, ObjectId } = mongoose.Types;
   const TYPES: any = {
     string: String,
     boolean: Boolean,
     number: Number,
     date: Date,
     buffer: Buffer,
-    mixed: Mixed,
+    // mixed: Mixed,
     objectid: ObjectId,
     array: Array,
     decimal128: Decimal128,

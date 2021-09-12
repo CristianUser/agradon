@@ -149,7 +149,7 @@ describe('lib/query.js', () => {
 
   describe('applyMethods', () => {
     test('should call methods in mongo query', () => {
-      const mongoQuery = {
+      const mongoQuery: any = {
         populate: jest.fn(() => mongoQuery),
         sort: jest.fn(() => mongoQuery)
       };

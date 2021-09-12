@@ -1,16 +1,16 @@
-/* eslint-disable no-undef */
-const controllers = require('./controllers'),
-  req = {
+import { defaultResponse } from "./controllers";
+
+const req = {
     body: {},
     query: {}
   },
-  res = {
+  res: any = {
     status: jest.fn(() => res),
     send: jest.fn()
   },
   data = { prop: 'value' },
   modelInstance = { save: jest.fn() },
-  model = jest.fn(() => modelInstance);
+  model: any = jest.fn(() => modelInstance);
 
 model.find = jest.fn();
 model.findById = jest.fn();
@@ -22,7 +22,7 @@ describe('lib/controllers.js', () => {
     test('should resolve promise and send data', () => {
       const dbResponse = Promise.resolve(data);
 
-      return controllers.defaultResponse(dbResponse, res).then(() => {
+      return defaultResponse(dbResponse, res).then(() => {
         expect(res.send.mock.calls.length).toBe(1);
         expect(res.send.mock.calls[0][0]).toEqual(data);
       });
@@ -32,7 +32,7 @@ describe('lib/controllers.js', () => {
       const err = { message: 'some error' };
       const dbResponse = Promise.reject(err);
 
-      return controllers.defaultResponse(dbResponse, res).then(() => {
+      return defaultResponse(dbResponse, res).then(() => {
         expect(res.status.mock.calls.length).toBe(1);
         expect(res.send.mock.calls.length).toBe(1);
         expect(res.status.mock.calls[0][0]).toBe(403);

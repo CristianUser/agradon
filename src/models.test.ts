@@ -3,11 +3,12 @@ jest.mock('fs');
 jest.mock('./utils');
 jest.mock('mongoose');
 
+import _ from 'lodash';
+
 const models = require('./models'),
   fs = require('fs'),
   mongoose = require('mongoose'),
-  utils = require('./utils'),
-  _ = require('lodash');
+  utils = require('./utils');
 
 describe('lib/models.js', () => {
   const schemas = {
@@ -98,7 +99,7 @@ describe('lib/models.js', () => {
     });
 
     test('should set hooks from file', () => {
-      function modelFile(schema) {
+      function modelFile(schema: any) {
         schema.pre('save', () => {});
         schema.set('', () => {});
 
@@ -114,7 +115,7 @@ describe('lib/models.js', () => {
     });
 
     test('should set hooks from file', () => {
-      function modelFile(schema) {
+      function modelFile(schema: any) {
         schema.pre('save', () => {});
         schema.set('', () => {});
       }

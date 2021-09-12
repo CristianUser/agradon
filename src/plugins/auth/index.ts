@@ -1,17 +1,16 @@
-import { Express } from 'express';
 import passport from 'passport';
-import { AgradonPlugin } from '../..';
-import { EntitiesFileSet, getFileGroup } from '../../services/files';
+import { AgradonPlugin } from '../../init';
+import { getFileGroup } from '../../services/files';
+import guard from './guard';
+import routes from './routes';
+import defaultStrategies from './strategies';
 
-const routes = require('./routes');
-const guard = require('./guard');
-const defaultStrategies = require('./strategies');
 
 /**
  * Register strategies in the passport instance
  * @param {Array} strategies
  */
-function registerStrategies(strategies: passport.Strategy[] = []) {
+export function registerStrategies(strategies: passport.Strategy[] = []) {
   strategies.forEach((strategy) => {
     passport.use(strategy);
   });
@@ -24,7 +23,7 @@ function registerStrategies(strategies: passport.Strategy[] = []) {
  * @param {object[]} newStrategies
  * @returns {object[]} merged result
  */
-function mergeStrategies(strategies: passport.Strategy[], newStrategies: passport.Strategy[]) {
+export function mergeStrategies(strategies: passport.Strategy[], newStrategies: passport.Strategy[]) {
   if (newStrategies) {
     newStrategies.forEach((strategy) => {
       const index = strategies.findIndex((_strategy) => _strategy.name === strategy.name);
@@ -39,7 +38,7 @@ function mergeStrategies(strategies: passport.Strategy[], newStrategies: passpor
   return strategies;
 }
 
-module.exports = (config: any = {}): AgradonPlugin => {
+export default (config: any = {}): AgradonPlugin => {
   const _config = {
     strategies: defaultStrategies(),
     userModel: 'User',
@@ -49,16 +48,14 @@ module.exports = (config: any = {}): AgradonPlugin => {
 
   _config.strategies = mergeStrategies(defaultStrategies(), config.strategies);
 
-  return (app: Express, fileSets: EntitiesFileSet, { rootPath }) => {
+  return (app, fileSets, { rootPath }) => {
+    const schemas = getFileGroup(fileSets, 'schema');
+
     registerStrategies(_config.strategies);
-    guard(app, getFileGroup(fileSets, 'schema'), rootPath);
+    guard(app, schemas, rootPath);
 
     if (_config.enableRoutes) {
       routes(app);
     }
   };
 };
-
-// for testing
-module.exports.mergeStrategies = mergeStrategies;
-module.exports.registerStrategies = registerStrategies;

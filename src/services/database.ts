@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { createLogger } from './log'
 
-const log = require('./log')({ file: __filename });
+const log = createLogger({ file: __filename });
 
 export default () => {
   return mongoose

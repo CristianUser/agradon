@@ -3,15 +3,15 @@ jest.mock('./services/database');
 jest.mock('./models');
 jest.mock('./utils');
 
-const lib = require('./index'),
+const lib = require('./init'),
   models = require('./models'),
   utils = require('./utils'),
   app = {
     use: jest.fn(),
     set: jest.fn()
   },
-  req = {},
-  res = {
+  req: any = {},
+  res: any = {
     set: jest.fn()
   };
 

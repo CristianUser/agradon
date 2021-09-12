@@ -1,5 +1,8 @@
-const _get = require('lodash/get');
-const { createCrudHandlers } = require('./controllers');
+import _ from 'lodash';
+import { Router } from 'express';
+import { createCrudHandlers } from './controllers';
+import { Model } from 'mongoose';
+
 
 /**
  * Returns path with param
@@ -7,7 +10,7 @@ const { createCrudHandlers } = require('./controllers');
  * @param {string} route.param
  * @returns {string} routePath
  */
-function getPath({ param }) {
+function getPath({ param }: any) {
   return param ? `/:${param}` : '/';
 }
 
@@ -18,7 +21,7 @@ function getPath({ param }) {
  * @param {Array} middlewares
  * @returns {Object} router
  */
-function createCrudRoutes(router, controller, middlewares = []) {
+export function createCrudRoutes(router: Router, controller: any, middlewares: any[] = []) {
   const routes = [
     { method: 'get' },
     { method: 'get', handler: 'getById', param: 'id' },
@@ -28,10 +31,14 @@ function createCrudRoutes(router, controller, middlewares = []) {
   ];
 
   for (const route of routes) {
-    const routeHandler = _get(controller, route.handler || route.method);
+    const routeHandler = _.get(controller, route.handler || route.method);
 
     if (routeHandler) {
-      router[route.method](getPath(route), ...middlewares, routeHandler);
+      router[route.method as 'get' | 'post' | 'put' | 'delete'](
+        getPath(route),
+        ...middlewares,
+        routeHandler
+      );
     }
   }
 
@@ -45,11 +52,6 @@ function createCrudRoutes(router, controller, middlewares = []) {
  * @param {Function[]} middleware
  * @returns {Object} router
  */
-function createDefaultCRUD(router, model, middleware) {
+export function createDefaultCRUD(router: Router, model: Model<any>, middleware: Function[]) {
   return createCrudRoutes(router, createCrudHandlers(model), middleware);
 }
-
-module.exports = {
-  createCrudRoutes,
-  createDefaultCRUD
-};

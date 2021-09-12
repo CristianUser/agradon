@@ -1,13 +1,12 @@
-/* eslint-disable no-undef */
-const guard = require('./guard');
+// const guard = require('./guard');
 
-const router = {
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn()
-  },
-  schemas = {
+// const router = {
+//     get: jest.fn(),
+//     post: jest.fn(),
+//     put: jest.fn(),
+//     delete: jest.fn()
+//   };
+const schemas = {
     something: {
       _schema: {
         usename: 'String'

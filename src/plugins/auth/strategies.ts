@@ -1,9 +1,10 @@
+import mongoose from 'mongoose';
+
 const LocalStrategy = require('passport-local').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const JWTStrategy = require('passport-jwt').Strategy;
-const mongoose = require('mongoose');
 
-function localStrategyFunc(email, password, cb) {
+export function localStrategyFunc(email: string, password: string, cb: Function) {
   const UserModel = mongoose.model('User');
 
   // Assume there is a DB module pproviding a global UserModel
@@ -22,7 +23,7 @@ function localStrategyFunc(email, password, cb) {
     });
 }
 
-function jwtFunc(jwtPayload, cb) {
+export function jwtFunc(jwtPayload: any, cb: Function) {
   const UserModel = mongoose.model('User');
 
   // find the user in db if needed
@@ -51,8 +52,5 @@ const jwtStrategy = new JWTStrategy(
   jwtFunc
 );
 
-module.exports = () => [localStrategy, jwtStrategy];
+export default () => [localStrategy, jwtStrategy];
 
-// for testing
-module.exports.localStrategyFunc = localStrategyFunc;
-module.exports.jwtFunc = jwtFunc;

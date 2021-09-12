@@ -1,4 +1,6 @@
-const { verifyAuth } = require('./utils');
+import { Router } from "express";
+import { FileGroup } from "../..";
+import { verifyAuth } from "./utils";
 
 /**
  * Set auth middleware to protect endpoints
@@ -7,7 +9,7 @@ const { verifyAuth } = require('./utils');
  * @param {object} schemas
  * @param {string} rootPath
  */
-module.exports = (router, schemas, rootPath = '') => {
+export default (router: Router, schemas: FileGroup<any>, rootPath = '') => {
   const schemaList = Object.keys(schemas);
   const routes = [
     { method: 'get' },
@@ -24,9 +26,9 @@ module.exports = (router, schemas, rootPath = '') => {
       routes.forEach(({ method, param }) => {
         if (schemaAuthConfig[method]) {
           if (param) {
-            router[method](`${rootPath}/${schemaName}/:${param}`, verifyAuth());
+            router[method as 'get'](`${rootPath}/${schemaName}/:${param}`, verifyAuth());
           } else {
-            router[method](`${rootPath}/${schemaName}`, verifyAuth());
+            router[method as 'get'](`${rootPath}/${schemaName}`, verifyAuth());
           }
         }
       });

@@ -14,13 +14,13 @@ const auth = require('./index'),
     strategies: [],
     userModel: 'User',
     enableRoutes: true
-  },
-  router = {
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn()
   };
+// const router = {
+//     get: jest.fn(),
+//     post: jest.fn(),
+//     put: jest.fn(),
+//     delete: jest.fn()
+//   };
 
 describe('auth/index.js', () => {
   describe('default module', () => {
