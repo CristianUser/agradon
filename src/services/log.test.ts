@@ -1,8 +1,8 @@
-const log = require('./log');
+import { createLogger } from './log';
 
 describe('lib/services/log.js', () => {
   test('should create logger', () => {
-    const logger = log({});
+    const logger = createLogger({});
 
     expect(logger).toBeTruthy();
   });

@@ -1,13 +1,14 @@
-require('dotenv').config();
-
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import _ from 'lodash';
 import express, { Express } from 'express';
 import { EntitiesFileSet, getFileGroup, readDirectory } from './services/files';
 import db from './services/database';
 import { createMongooseModels } from './models';
 import { createDefaultCRUD } from './crud';
-import createLogger from './services/log';
+import { createLogger } from './services/log';
 
+require('dotenv').config();
 
 const log = createLogger({ file: __filename });
 const pkg = require('../package.json');

@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { FileGroup } from "../..";
-import { verifyAuth } from "./utils";
+import { Router } from 'express';
+import { FileGroup } from '../../services/files';
+import { verifyAuth } from './utils';
 
 /**
  * Set auth middleware to protect endpoints
@@ -20,6 +20,7 @@ export default (router: Router, schemas: FileGroup<any>, rootPath = '') => {
   ];
 
   schemaList.forEach((schemaName) => {
+    // eslint-disable-next-line no-underscore-dangle
     const schemaAuthConfig = schemas[schemaName]._auth;
 
     if (schemaAuthConfig) {

@@ -1,10 +1,10 @@
+/* eslint-disable no-param-reassign */
 import passport from 'passport';
 import { AgradonPlugin } from '../../init';
 import { getFileGroup } from '../../services/files';
 import guard from './guard';
 import routes from './routes';
 import defaultStrategies from './strategies';
-
 
 /**
  * Register strategies in the passport instance
@@ -23,7 +23,10 @@ export function registerStrategies(strategies: passport.Strategy[] = []) {
  * @param {object[]} newStrategies
  * @returns {object[]} merged result
  */
-export function mergeStrategies(strategies: passport.Strategy[], newStrategies: passport.Strategy[]) {
+export function mergeStrategies(
+  strategies: passport.Strategy[],
+  newStrategies: passport.Strategy[]
+) {
   if (newStrategies) {
     newStrategies.forEach((strategy) => {
       const index = strategies.findIndex((_strategy) => _strategy.name === strategy.name);
@@ -39,22 +42,22 @@ export function mergeStrategies(strategies: passport.Strategy[], newStrategies: 
 }
 
 export default (config: any = {}): AgradonPlugin => {
-  const _config = {
+  const parsedConfig: any = {
     strategies: defaultStrategies(),
     userModel: 'User',
     enableRoutes: true,
     ...config
   };
 
-  _config.strategies = mergeStrategies(defaultStrategies(), config.strategies);
+  parsedConfig.strategies = mergeStrategies(defaultStrategies(), config.strategies);
 
   return (app, fileSets, { rootPath }) => {
     const schemas = getFileGroup(fileSets, 'schema');
 
-    registerStrategies(_config.strategies);
+    registerStrategies(parsedConfig.strategies);
     guard(app, schemas, rootPath);
 
-    if (_config.enableRoutes) {
+    if (parsedConfig.enableRoutes) {
       routes(app);
     }
   };

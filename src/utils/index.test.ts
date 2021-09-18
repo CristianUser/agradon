@@ -1,4 +1,3 @@
-'use strict';
 const index = require('./index');
 
 describe('utils/index.js', () => {

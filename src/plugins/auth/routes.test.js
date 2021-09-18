@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable one-var */
 const routes = require('./routes'),
   passport = require('passport'),
   router = {
