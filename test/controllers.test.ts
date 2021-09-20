@@ -1,4 +1,4 @@
-import { defaultResponse } from "./controllers";
+import { defaultResponse } from "../src/controllers";
 
 const req = {
     body: {},

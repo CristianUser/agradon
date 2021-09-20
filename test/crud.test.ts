@@ -1,25 +1,26 @@
+import { createCrudHandlers } from '../src/controllers';
+import { createCrudRoutes, createDefaultCRUD } from '../src/crud';
+
 jest.mock('./controllers');
 
-const controllers = require('./controllers');
-const crud = require('./crud'),
-  controller = {
-    get: jest.fn(),
-    getById: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn()
-  },
-  router = {
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn()
-  };
+const controller = {
+  get: jest.fn(),
+  getById: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn()
+};
+const router = {
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn()
+};
 
 describe('lib/crud.js', () => {
   describe('createCrudRoutes', () => {
     test('should create routes', () => {
-      crud.createCrudRoutes(router, controller);
+      createCrudRoutes(router, controller);
 
       expect(router.get.mock.calls.length).toBe(2);
       expect(router.post.mock.calls.length).toBe(1);
@@ -29,7 +30,7 @@ describe('lib/crud.js', () => {
     });
 
     test("shouldn't create routes", () => {
-      crud.createCrudRoutes(router);
+      createCrudRoutes(router);
 
       expect(router.get.mock.calls.length).toBe(0);
       expect(router.post.mock.calls.length).toBe(0);
@@ -40,10 +41,10 @@ describe('lib/crud.js', () => {
 
   describe('createDefaultCRUD', () => {
     test('should create routes', () => {
-      controllers.createCrudHandlers.mockReturnValue(controller);
-      crud.createDefaultCRUD(router);
+      createCrudHandlers.mockReturnValue(controller);
+      createDefaultCRUD(router);
 
-      expect(controllers.createCrudHandlers.mock.calls.length).toBe(1);
+      expect(createCrudHandlers.mock.calls.length).toBe(1);
     });
   });
 });

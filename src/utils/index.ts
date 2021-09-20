@@ -1,9 +1,12 @@
+/* eslint-disable global-require */
+/* eslint-disable consistent-return */
+/* eslint-disable import/no-dynamic-require */
 /**
  * Try to require a filePath
  * @param {string} filePath
  * @returns {Object} module required
  */
- export function tryRequire(filePath: string) {
+export function tryRequire(filePath: string) {
   try {
     require.resolve(filePath);
   } catch (ex) {
@@ -20,6 +23,7 @@
  */
 function standarizePath(path: string) {
   const isExtendedLengthPath = /^\\\\\?\\/.test(path);
+  // eslint-disable-next-line no-control-regex
   const hasNonAscii = /[^\u0000-\u0080]+/.test(path);
 
   if (isExtendedLengthPath || hasNonAscii) {
@@ -34,7 +38,7 @@ function standarizePath(path: string) {
  * @param {string} filePath
  * @returns {string}
  */
- export function getEntityName(filePath: string) {
+export function getEntityName(filePath: string) {
   return standarizePath(filePath).split('/').reverse()[1];
 }
 
@@ -43,7 +47,7 @@ function standarizePath(path: string) {
  * @param {string} text
  * @returns {string}
  */
- export function toPascalCase(text: string) {
+export function toPascalCase(text: string) {
   return `${text}`
     .replace(new RegExp(/[-_]+/, 'g'), ' ')
     .replace(new RegExp(/[^\w\s]/, 'g'), '')

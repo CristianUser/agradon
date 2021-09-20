@@ -10,7 +10,8 @@ const EXTENSION_LOADER: any = {
   '.yaml': loadYaml,
   '.yml': loadYaml,
   '.js': require,
-  '.ts': require
+  '.ts': require,
+  '.json': require
 };
 
 type ControllerFile = (router: any, model: any) => void;

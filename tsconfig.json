@@ -68,11 +68,11 @@
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
     "resolveJsonModule": true,
     "outDir": "lib",
-    "sourceMap": true,
     "allowJs": true,
   },
   "include": [
     "src/**/*",
+    "test/**/*"
   ],
   "types": ["jest"]
 }

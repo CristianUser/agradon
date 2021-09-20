@@ -1,4 +1,4 @@
-import { createLogger } from './log';
+import { createLogger } from '../../src/services/log';
 
 describe('lib/services/log.js', () => {
   test('should create logger', () => {

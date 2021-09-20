@@ -16,18 +16,19 @@ npm install agradon
 
 Initialize **Agradon**
 
-Set `MONGODB_URI` environment variable and import `agradon` in your app index.
+Create a mongoose connection import `agradon` in your app index.
 
 ```javascript
 const express = require('express');
 const agradon = require('agradon');
 const app = express();
 
-agradon.init(app);
+async function build() {
+  await agradon.init({ app });
+  app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}`));
+}
 
-app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}`));
-
-module.exports = app;
+build();
 ```
 
 Agradon also support plugins for increase functionality.

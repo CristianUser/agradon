@@ -1,13 +1,14 @@
 {
   "name": "agradon",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.",
   "main": "lib/index.js",
   "scripts": {
     "watch": "nodemon",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "author": "cristianuser",
   "license": "MIT",

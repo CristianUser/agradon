@@ -2,8 +2,8 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import express, { Express } from 'express';
+import { Mongoose } from 'mongoose';
 import { EntitiesFileSet, getFileGroup, readDirectory } from './services/files';
-import db from './services/database';
 import { createMongooseModels } from './models';
 import { createDefaultCRUD } from './crud';
 import { createLogger } from './services/log';
@@ -19,8 +19,9 @@ export type AgradonPlugin = (
   config: AgradonConfig
 ) => void;
 export type AgradonConfig = {
-  app?: Express;
+  app: Express;
   rootPath?: string;
+  mongooseConnection: Mongoose;
   plugins: AgradonPlugin[];
 };
 
@@ -88,20 +89,20 @@ export function registerPlugins(
  * @returns {Promise<Express.Application>}
  * @throws when express app is not loaded
  */
-export function init(config: Express | AgradonConfig | any) {
+export function init(config: AgradonConfig) {
   const fileSets = readDirectory('src/entities');
   const mongooseModels = createMongooseModels(getFileGroup(fileSets, 'schema'));
-  const app: Express = config.app || config || {};
+  const { app, mongooseConnection } = config;
 
-  if (app.use || false) {
-    setMiddlewares(app);
+  setMiddlewares(app);
 
-    return db().then(() => {
+  return mongooseConnection.connection
+    .asPromise()
+    .then(() => {
       registerPlugins(app, fileSets, config);
       registerRoutes(app, config, mongooseModels, fileSets);
       log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
       return app;
-    });
-  }
-  throw new Error('Is missing Express instance');
+    })
+    .catch(log.error);
 }
