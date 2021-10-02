@@ -6,7 +6,6 @@ import _ from 'lodash';
 import mongoose, { Schema } from 'mongoose';
 import { EntitiesFileSet, getFileGroup } from './files';
 import { createLogger } from './log';
-import { toPascalCase } from './utils';
 
 const log = createLogger({ file: __filename });
 
@@ -48,11 +47,13 @@ function getSchemaType(type: string | Array<string>) {
 function parseSchemaField(schemaFile: any, fieldKey: string) {
   const field = _.get(schemaFile, fieldKey);
 
-  if (_.isString(field)) {
-    _.set(schemaFile, fieldKey, getSchemaType(field));
-  } else if (_.get(field, 'type')) {
+  if (_.get(field, 'type')) {
     _.set(schemaFile, `${fieldKey}.type`, getSchemaType(field.type));
-  } else {
+  } else if (_.get(field, '$ref')) {
+    field.type = getSchemaType('ObjectId');
+    field.ref = field.$ref.split('/').pop();
+    delete field.$ref;
+  } else if (typeof field === 'object') {
     // for nested definitions
     for (const fieldKey1 in field) {
       parseSchemaField(field, fieldKey1);
@@ -64,9 +65,13 @@ function parseSchemaField(schemaFile: any, fieldKey: string) {
  * Set the Data Type to each field in schema
  * @param {Object} schemaFile
  */
-function parseSchemaFields({ _schema }: any) {
-  for (const fieldKey in _schema) {
-    parseSchemaField(_schema, fieldKey);
+function parseSchemaFields(jsonSchema: any) {
+  for (const fieldKey in jsonSchema.properties) {
+    parseSchemaField(jsonSchema.properties, fieldKey);
+
+    if (jsonSchema.required.includes(fieldKey)) {
+      jsonSchema.properties[fieldKey].required = `"${fieldKey}" is required"`;
+    }
   }
 }
 
@@ -123,8 +128,8 @@ function setSchemaHooks(schema: Schema, modelFile: any) {
  * @param {string} schemaKey schema name from the folder
  * @returns {Schema} mongoose schema
  */
-function createMongooseSchema({ _schema, _options }: any, modelFile: any) {
-  const newSchema = new mongoose.Schema(_schema, _options);
+function createMongooseSchema({ properties }: any, modelFile: any) {
+  const newSchema = new mongoose.Schema(properties, { timestamps: true });
 
   setSchemaHooks(newSchema, modelFile);
   return newSchema;
@@ -149,15 +154,15 @@ export type ModelsSet = { [key: string]: mongoose.Model<any> };
 export function loadMongooseModels(filesSets: EntitiesFileSet): ModelsSet {
   const schemaFiles = getFileGroup(filesSets, 'schema');
   const modelFiles = getFileGroup(filesSets, 'model');
-  const schemas = mapSchemasType(schemaFiles);
+  const schemas = mapSchemasType(_.cloneDeep(schemaFiles));
   const models: ModelsSet = {};
 
   for (const key in schemas) {
     const schema = schemas[key];
     const model = modelFiles[key];
-    const schemaName = toPascalCase(key);
+    // const schemaName = toPascalCase(key);
 
-    models[key] = registerMongooseModel(createMongooseSchema(schema, model), schemaName);
+    models[key] = registerMongooseModel(createMongooseSchema(schema, model), key);
   }
 
   return models;
