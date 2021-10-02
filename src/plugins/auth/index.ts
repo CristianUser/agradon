@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
+import { Router } from 'express';
 import passport from 'passport';
-import { AgradonPlugin } from '../../init';
-import { getFileGroup } from '../../services/files';
+import { AgradonConfig } from '../../init';
+import { EntitiesFileSet, getFileGroup } from '../../services/files';
+import { AgradonPlugin } from '../base';
 import guard from './guard';
 import routes from './routes';
 import defaultStrategies from './strategies';
@@ -41,26 +43,32 @@ export function mergeStrategies(
   return strategies;
 }
 
-export default (config: any = {}): AgradonPlugin => {
-  const parsedConfig: any = {
-    strategies: defaultStrategies(),
-    userModel: 'User',
-    enableRoutes: true,
-    ...config
-  };
+export default {};
+export class AuthPlugin extends AgradonPlugin {
+  public config: any;
 
-  parsedConfig.strategies = mergeStrategies(defaultStrategies(), config.strategies);
+  constructor(config: any = {}) {
+    super();
+    const parsedConfig: any = {
+      strategies: defaultStrategies(),
+      userModel: 'User',
+      enableRoutes: true,
+      ...config
+    };
+    parsedConfig.strategies = mergeStrategies(defaultStrategies(), config.strategies);
+    this.config = parsedConfig;
+  }
 
-  return (app, fileSets, { rootPath }) => {
+  load(app: Router, fileSets: EntitiesFileSet, { rootPath }: AgradonConfig): void {
     const schemas = getFileGroup(fileSets, 'schema');
 
-    registerStrategies(parsedConfig.strategies);
+    registerStrategies(this.config.strategies);
     guard(app, schemas, rootPath);
 
-    if (parsedConfig.enableRoutes) {
+    if (this.config.enableRoutes) {
       routes(app);
     }
-  };
-};
+  }
+}
 
 export * from './utils';

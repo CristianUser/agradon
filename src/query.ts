@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import _ from 'lodash';
-
-const { parseJSON } = require('./utils');
+import { parseJSON } from './services/utils';
 
 /**
  * Return params without unsupported characters

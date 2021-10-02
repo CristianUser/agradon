@@ -1,6 +1,6 @@
 {
   "name": "agradon",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.4",
   "description": "Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.",
   "main": "lib/index.js",
   "scripts": {

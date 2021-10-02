@@ -31,20 +31,21 @@ async function build() {
 build();
 ```
 
-Agradon also support plugins for increase functionality.
-
+Agradon also support plugins for increase functionality. We made plugins class based to extend their capabilities in the future.
 Plugin Example:
 
 ```javascript
-function customPlugin(router, mongoose, schemas) {
+class CustomPlugin extends AgradonPlugin {
+  load (router, mongoose, schemas) {
   // Code live here
   ...
+  }
 }
 
 
 const config = {
   app,
-  plugins: [customPlugin]
+  plugins: [new CustomPlugin()]
 }
 ```
 
@@ -52,28 +53,13 @@ const config = {
 
 Agrandon entities are composed by three different files. Entities by default are located in entities folder, Example: `entities/<entitity-name>/schema.yml` You can also change this setting path in `ENTITIES_PATH` environment variable.
 
--schema.yml (Required)
+-schema.json (Required)
 -model.js (Optional)
 -controller.js (Optional)
 
-### schema.yml \*
+### schema.json \*
 
-Schema file defines documents structure as `Mongoose.Schema` .
-
-```yaml
-_schema:
-  name:
-    first:
-      type: String
-      default: John
-    last: String
-  phone: String
-  age:
-    type: Number
-    required: true
-_options:
-  timestamps: true
-```
+Schemas now are json-schema based.
 
 ### model.js
 
@@ -114,7 +100,7 @@ agradon.init({
   app,
   rootPath: '/api',
   plugins: [
-    require('agradon/auth')()
+    new AuthPlugin()
   ]
 });
 ```

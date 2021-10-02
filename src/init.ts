@@ -6,17 +6,14 @@ import { EntitiesFileSet, getFileGroup, readDirectory } from './services/files';
 import { createDefaultCRUD } from './crud';
 import { createLogger } from './services/log';
 import { loadMongooseModels } from './services/mongoose';
+// eslint-disable-next-line import/no-cycle
+import { AgradonPlugin } from './plugins/base';
 
 require('dotenv').config();
 
 const log = createLogger({ file: __filename });
 const pkg = require('../package.json');
 
-export type AgradonPlugin = (
-  app: Express,
-  fileSets: EntitiesFileSet,
-  config: AgradonConfig
-) => void;
 export type AgradonConfig = {
   app: Express;
   rootPath?: string;
@@ -60,7 +57,7 @@ export function loadPlugins(app: Express, fileSets: EntitiesFileSet, agradonConf
   const { plugins = [] } = agradonConfig;
 
   plugins.forEach((plugin: AgradonPlugin) => {
-    plugin(app, fileSets, agradonConfig);
+    plugin.load(app, fileSets, agradonConfig);
   });
 }
 
