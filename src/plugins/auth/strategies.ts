@@ -53,4 +53,3 @@ const jwtStrategy = new JWTStrategy(
 );
 
 export default () => [localStrategy, jwtStrategy];
-

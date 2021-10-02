@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-import _ from 'lodash';
 import express, { Express } from 'express';
 import { Mongoose } from 'mongoose';
 import { EntitiesFileSet, getFileGroup, readDirectory } from './services/files';
@@ -26,18 +25,6 @@ export type AgradonConfig = {
 };
 
 /**
- * Set global middlewares
- * @param {Express} app
- */
-export function setMiddlewares(app: Express) {
-  app.use(express.json());
-  app.use((req, res, next) => {
-    res.set('X-Powered-By', `Agradon V-${pkg.version}`);
-    next();
-  });
-}
-
-/**
  * Register routes in Express app
  * @param {object} config
  * @param {object} entities
@@ -48,34 +35,28 @@ export function registerRoutes(
   mongooseModels: any,
   fileSets: EntitiesFileSet
 ) {
-  const modelModules = getFileGroup(fileSets, 'model') || {};
   const controllers = getFileGroup(fileSets, 'controller') || {};
 
   for (const entity in mongooseModels) {
     const entityModel = mongooseModels[entity];
-    const entityMiddleware = _.get(modelModules, [entity, 'middleware'], []);
     const entityRouter = express.Router();
 
     if (controllers[entity]) {
-      controllers[entity](entityRouter, entityModel, entityMiddleware);
+      controllers[entity](entityRouter, entityModel);
     }
-    createDefaultCRUD(entityRouter, entityModel, entityMiddleware);
+    createDefaultCRUD(entityRouter, entityModel);
 
     app.use(`${rootPath || ''}/${entity}`, entityRouter);
   }
 }
 
 /**
- * Register plugins
+ * Load and run plugins
  * @param {Express} app
  * @param {EntitiesFileSet} fileSets
  * @param {AgradonConfig} agradonConfig
  */
-export function registerPlugins(
-  app: Express,
-  fileSets: EntitiesFileSet,
-  agradonConfig: AgradonConfig
-) {
+export function loadPlugins(app: Express, fileSets: EntitiesFileSet, agradonConfig: AgradonConfig) {
   const { plugins = [] } = agradonConfig;
 
   plugins.forEach((plugin: AgradonPlugin) => {
@@ -94,12 +75,16 @@ export function init(config: AgradonConfig) {
   const mongooseModels = createMongooseModels(getFileGroup(fileSets, 'schema'));
   const { app, mongooseConnection } = config;
 
-  setMiddlewares(app);
+  app.use(express.json());
+  app.use((req, res, next) => {
+    res.set('X-Powered-By', `Agradon V-${pkg.version}`);
+    next();
+  });
 
   return mongooseConnection.connection
     .asPromise()
     .then(() => {
-      registerPlugins(app, fileSets, config);
+      loadPlugins(app, fileSets, config);
       registerRoutes(app, config, mongooseModels, fileSets);
       log.info('Agradon Loaded 👀 ⭐️', { version: pkg.version });
       return app;

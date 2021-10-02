@@ -81,11 +81,9 @@ Model file used to set `virtual`, `hooks`, etc. You also can register middleware
 
 ```javascript
 module.exports.schema = schema => {
-  // Code live here
+  // Code goes here
   return schema;
 };
-
-module.exports.middleware = [];
 ```
 
 ### controller.js
@@ -93,7 +91,7 @@ module.exports.middleware = [];
 Controller file is used to create custom endpoints or add middlewares to the default endpoints.
 
 ```javascript
-module.exports = (router, model, middleware) => {
+module.exports = (router, model) => {
   router.get('/', (req, res) => {
     return model.find({}).then(result => {
       res.send(result);

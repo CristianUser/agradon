@@ -1,8 +1,8 @@
+/* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 import { Router } from 'express';
-import { createCrudHandlers } from './controllers';
 import { Model } from 'mongoose';
-
+import { createCrudHandlers } from './controllers';
 
 /**
  * Returns path with param
@@ -21,7 +21,7 @@ function getPath({ param }: any) {
  * @param {Array} middlewares
  * @returns {Object} router
  */
-export function createCrudRoutes(router: Router, controller: any, middlewares: any[] = []) {
+export function createCrudRoutes(router: Router, controller: any) {
   const routes = [
     { method: 'get' },
     { method: 'get', handler: 'getById', param: 'id' },
@@ -34,11 +34,7 @@ export function createCrudRoutes(router: Router, controller: any, middlewares: a
     const routeHandler = _.get(controller, route.handler || route.method);
 
     if (routeHandler) {
-      router[route.method as 'get' | 'post' | 'put' | 'delete'](
-        getPath(route),
-        ...middlewares,
-        routeHandler
-      );
+      router[route.method as 'get' | 'post' | 'put' | 'delete'](getPath(route), routeHandler);
     }
   }
 
@@ -52,6 +48,6 @@ export function createCrudRoutes(router: Router, controller: any, middlewares: a
  * @param {Function[]} middleware
  * @returns {Object} router
  */
-export function createDefaultCRUD(router: Router, model: Model<any>, middleware: Function[]) {
-  return createCrudRoutes(router, createCrudHandlers(model), middleware);
+export function createDefaultCRUD(router: Router, model: Model<any>) {
+  return createCrudRoutes(router, createCrudHandlers(model));
 }

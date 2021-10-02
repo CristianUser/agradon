@@ -26,11 +26,11 @@ export default (router: Router, schemas: FileGroup<any>, rootPath = '') => {
     if (schemaAuthConfig) {
       routes.forEach(({ method, param }) => {
         if (schemaAuthConfig[method]) {
-          if (param) {
-            router[method as 'get'](`${rootPath}/${schemaName}/:${param}`, verifyAuth());
-          } else {
-            router[method as 'get'](`${rootPath}/${schemaName}`, verifyAuth());
-          }
+          const routeStr = param
+            ? `${rootPath}/${schemaName}/:${param}`
+            : `${rootPath}/${schemaName}`;
+
+          router[method as 'get'](routeStr, verifyAuth());
         }
       });
     }

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { Router } from 'express';
@@ -25,9 +26,9 @@ export function localRoute(req: any, res: any) {
       });
     }
 
-    req.login(user, { session: false }, (err: any) => {
-      if (err) {
-        return res.send(err);
+    req.login(user, { session: false }, (error: any) => {
+      if (error) {
+        return res.send(error);
       }
 
       const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET || 'your_jwt_secret');
