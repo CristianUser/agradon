@@ -15,10 +15,10 @@ export function defaultResponse(toResponse: any, response: any) {
 }
 /**
  * Create basic controller handlers
- * @param {Object} model
+ * @param {Model<any>} ModelClass
  * @returns {Object} controller
  */
-export function createCrudHandlers(model: Model<any>) {
+export function createCrudHandlers(ModelClass: Model<any>) {
   const controller: any = {};
 
   /**
@@ -28,8 +28,8 @@ export function createCrudHandlers(model: Model<any>) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.post = function({ body }: any, res: any) {
-    const newDocument = new model(body);
+  controller.post = ({ body }: any, res: any) => {
+    const newDocument = new ModelClass(body);
 
     return defaultResponse(newDocument.save(), res);
   };
@@ -41,12 +41,12 @@ export function createCrudHandlers(model: Model<any>) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.get = function({ query }: any, res: any) {
+  controller.get = ({ query }: any, res: any) => {
     const args = resolveArguments(query);
     const projection = resolveProjection(query);
     const options = resolvePagination(query);
 
-    return defaultResponse(applyMethods(query, model.find(args, projection, options)), res);
+    return defaultResponse(applyMethods(query, ModelClass.find(args, projection, options)), res);
   };
 
   /**
@@ -56,8 +56,8 @@ export function createCrudHandlers(model: Model<any>) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.getById = function({ params, query }: any, res: any) {
-    return defaultResponse(applyMethods(query, model.findById(params.id)), res);
+  controller.getById = ({ params, query }: any, res: any) => {
+    return defaultResponse(applyMethods(query, ModelClass.findById(params.id)), res);
   };
 
   /**
@@ -67,8 +67,8 @@ export function createCrudHandlers(model: Model<any>) {
    * @param {Function} next
    * @returns {Promise}
    */
-  controller.put = function({ body, params }: any, res: any) {
-    return defaultResponse(model.updateOne({ _id: params.id }, body), res);
+  controller.put = ({ body, params }: any, res: any) => {
+    return defaultResponse(ModelClass.updateOne({ _id: params.id }, body), res);
   };
 
   /**
@@ -79,7 +79,7 @@ export function createCrudHandlers(model: Model<any>) {
    * @returns {Promise}
    */
   controller.delete = ({ params }: any, res: any) => {
-    return defaultResponse(model.deleteOne({ _id: params.id }), res);
+    return defaultResponse(ModelClass.deleteOne({ _id: params.id }), res);
   };
 
   return controller;

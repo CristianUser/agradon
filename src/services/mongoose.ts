@@ -1,7 +1,11 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import _ from 'lodash';
 import mongoose, { Schema } from 'mongoose';
-import { FileGroup, getModels } from './services/files';
-import { createLogger } from './services/log';
+import { EntitiesFileSet, getFileGroup } from './files';
+import { createLogger } from './log';
 import { toPascalCase } from './utils';
 
 const log = createLogger({ file: __filename });
@@ -81,24 +85,6 @@ function mapSchemasType(schemas: any) {
 }
 
 /**
- * Creates Mongoose Models from Mongoose schemas
- * @returns {Object} models
- */
-export function createMongooseModels(schemaFiles: FileGroup) {
-  const schemas = mapSchemasType(schemaFiles);
-  const models: any = {};
-
-  for (const key in schemas) {
-    const schema = schemas[key];
-    const schemaName = toPascalCase(key);
-
-    models[key] = registerMongooseModel(createMongooseSchema(schema, key), schemaName);
-  }
-
-  return models;
-}
-
-/**
  * Set default options to every schema
  * @param {Object} schema mongoose schema
  */
@@ -117,17 +103,15 @@ function setDefaultHooks(schema: Schema) {
  * @param {Object} schema mongoose schema
  * @param {string} schemaKey schema name from the folder
  */
-function setSchemaHooks(schema: Schema, schemaKey: string) {
-  const models = getModels();
-
-  if (_.get(models, `${schemaKey}.schema`)) {
-    const schemaResult = models[schemaKey].schema(schema); // execute schema file hook
+function setSchemaHooks(schema: Schema, modelFile: any) {
+  if (_.get(modelFile, 'schema') && typeof modelFile.schema === 'function') {
+    const schemaResult = modelFile.schema(schema); // execute schema file hook
 
     // verify if schema file is returning the schema
     if (schemaResult) {
       schema = schemaResult;
     } else {
-      log.error(`schema isn't been returned in ${schemaKey}/model.js`);
+      log.error("schema isn't been returned in one model.js");
     }
   }
   setDefaultHooks(schema);
@@ -137,21 +121,46 @@ function setSchemaHooks(schema: Schema, schemaKey: string) {
  * Create an mongoose schema
  * @param {Object} schema schema definition object
  * @param {string} schemaKey schema name from the folder
- * @returns {Object} mongoose schema
+ * @returns {Schema} mongoose schema
  */
-function createMongooseSchema({ _schema, _options }: any, schemaKey: string) {
+function createMongooseSchema({ _schema, _options }: any, modelFile: any) {
   const newSchema = new mongoose.Schema(_schema, _options);
 
-  setSchemaHooks(newSchema, schemaKey);
+  setSchemaHooks(newSchema, modelFile);
   return newSchema;
 }
 
 /**
  * Register model in mongoose instance
- * @param {Object} schema mongoose schema
+ * @param {Schema} schema mongoose schema
  * @param {string} name schema name
- * @returns {Obejct} mongoose model
+ * @returns {mongoose.Model<any>} mongoose model
  */
 function registerMongooseModel(schema: Schema, name: string) {
   return mongoose.model(name, schema);
 }
+
+export type ModelsSet = { [key: string]: mongoose.Model<any> };
+
+/**
+ * Creates Mongoose Models from Mongoose schemas
+ * @returns {any} models
+ */
+export function loadMongooseModels(filesSets: EntitiesFileSet): ModelsSet {
+  const schemaFiles = getFileGroup(filesSets, 'schema');
+  const modelFiles = getFileGroup(filesSets, 'model');
+  const schemas = mapSchemasType(schemaFiles);
+  const models: ModelsSet = {};
+
+  for (const key in schemas) {
+    const schema = schemas[key];
+    const model = modelFiles[key];
+    const schemaName = toPascalCase(key);
+
+    models[key] = registerMongooseModel(createMongooseSchema(schema, model), schemaName);
+  }
+
+  return models;
+}
+
+export default {};

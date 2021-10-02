@@ -1,10 +1,10 @@
+/* eslint-disable no-param-reassign */
 import _ from 'lodash';
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
 import jsYaml from 'js-yaml';
 
-let entitiesFileSet = {};
 const loadYaml = (filePath: string) => jsYaml.load(fs.readFileSync(filePath, 'utf8'));
 const EXTENSION_LOADER: any = {
   '.yaml': loadYaml,
@@ -42,7 +42,6 @@ export function readDirectory(entitiesPath: string): EntitiesFileSet {
     _.set(entities, [entityName, fileName], EXTENSION_LOADER[ext](resolvedPath));
   });
 
-  entitiesFileSet = entities
   return entities;
 }
 
@@ -51,8 +50,4 @@ export function getFileGroup(fileSets: EntitiesFileSet, fileName: string): FileG
     prev[entityName] = fileSet[fileName];
     return prev;
   }, {});
-}
-
-export function getModels() {
-  return getFileGroup(entitiesFileSet, 'model');
 }

@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 import _ from 'lodash';
+
 const { parseJSON } = require('./utils');
 
 /**
@@ -65,6 +67,7 @@ export function resolvePick(query: any) {
       return prev;
     }, {});
   }
+  return undefined;
 }
 
 export function resolveOmit(query: any) {
@@ -76,6 +79,7 @@ export function resolveOmit(query: any) {
       return prev;
     }, {});
   }
+  return undefined;
 }
 
 /**
@@ -121,7 +125,7 @@ export function resolveCompare(query: any) {
 }
 
 export function resolvePagination(query: any) {
-  const limit = parseInt(_.get(query, 'perPage') || _.get(query, 'limit'));
+  const limit = parseInt(_.get(query, 'perPage') || _.get(query, 'limit'), 10);
   const page = _.get(query, 'page', 1);
 
   if (limit) {
@@ -130,6 +134,7 @@ export function resolvePagination(query: any) {
       limit
     };
   }
+  return undefined;
 }
 
 /**
@@ -149,6 +154,8 @@ export function parseQueryMethod(query: any, prop: string, parser: Function) {
     toReturn[prop] = toParse.map(parser);
     return toReturn;
   }
+
+  return query[prop];
 }
 
 /**

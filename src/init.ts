@@ -3,9 +3,9 @@
 import express, { Express } from 'express';
 import { Mongoose } from 'mongoose';
 import { EntitiesFileSet, getFileGroup, readDirectory } from './services/files';
-import { createMongooseModels } from './models';
 import { createDefaultCRUD } from './crud';
 import { createLogger } from './services/log';
+import { loadMongooseModels } from './services/mongoose';
 
 require('dotenv').config();
 
@@ -72,7 +72,7 @@ export function loadPlugins(app: Express, fileSets: EntitiesFileSet, agradonConf
  */
 export function init(config: AgradonConfig) {
   const fileSets = readDirectory('src/entities');
-  const mongooseModels = createMongooseModels(getFileGroup(fileSets, 'schema'));
+  const mongooseModels = loadMongooseModels(fileSets);
   const { app, mongooseConnection } = config;
 
   app.use(express.json());
