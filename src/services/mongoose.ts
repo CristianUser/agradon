@@ -48,7 +48,13 @@ function parseSchemaField(schemaFile: any, fieldKey: string) {
   const field = _.get(schemaFile, fieldKey);
 
   if (_.get(field, 'type')) {
-    _.set(schemaFile, `${fieldKey}.type`, getSchemaType(field.type));
+    if (field.type === 'array') {
+      parseSchemaField(field, 'items');
+
+      schemaFile[fieldKey] = [field.items];
+    } else {
+      _.set(schemaFile, `${fieldKey}.type`, getSchemaType(field.type));
+    }
   } else if (_.get(field, '$ref')) {
     field.type = getSchemaType('ObjectId');
     field.ref = field.$ref.split('/').pop();
@@ -160,7 +166,6 @@ export function loadMongooseModels(filesSets: EntitiesFileSet): ModelsSet {
   for (const key in schemas) {
     const schema = schemas[key];
     const model = modelFiles[key];
-    // const schemaName = toPascalCase(key);
 
     models[key] = registerMongooseModel(createMongooseSchema(schema, model), key);
   }
