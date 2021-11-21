@@ -1,6 +1,11 @@
 import { Model } from 'mongoose';
 
-const { resolveArguments, resolveProjection, resolvePagination, applyMethods } = require('./query');
+const {
+  resolveArguments,
+  resolveProjection,
+  resolvePagination,
+  applyMethods
+} = require('../../query');
 
 /**
  * Send a default response
@@ -10,8 +15,8 @@ const { resolveArguments, resolveProjection, resolvePagination, applyMethods } =
  */
 export function defaultResponse(toResponse: any, response: any) {
   return toResponse
-    .then((data: any) => response.send(data))
-    .catch((err: any) => response.status(403).send(err));
+    .then((data: any) => response.json(data))
+    .catch((err: any) => response.status(400).json(err));
 }
 /**
  * Create basic controller handlers

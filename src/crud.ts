@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 import { Router } from 'express';
-import { Model } from 'mongoose';
-import { createCrudHandlers } from './controllers';
+import { DbAdapter } from './services/db';
 
 /**
  * Returns path with param
@@ -13,6 +12,8 @@ import { createCrudHandlers } from './controllers';
 function getPath({ param }: any) {
   return param ? `/:${param}` : '/';
 }
+
+export type HTTPMethod = 'get' | 'post' | 'put' | 'delete';
 
 /**
  * Create four basic routes
@@ -34,7 +35,7 @@ export function createCrudRoutes(router: Router, controller: any) {
     const routeHandler = _.get(controller, route.handler || route.method);
 
     if (routeHandler) {
-      router[route.method as 'get' | 'post' | 'put' | 'delete'](getPath(route), routeHandler);
+      router[route.method as HTTPMethod](getPath(route), routeHandler);
     }
   }
 
@@ -48,6 +49,6 @@ export function createCrudRoutes(router: Router, controller: any) {
  * @param {Function[]} middleware
  * @returns {Object} router
  */
-export function createDefaultCRUD(router: Router, model: Model<any>) {
-  return createCrudRoutes(router, createCrudHandlers(model));
+export function createDefaultCRUD(router: Router, modelName: string, db: DbAdapter) {
+  return createCrudRoutes(router, db.createCrudHandlers(modelName));
 }

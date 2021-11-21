@@ -4,8 +4,10 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import mongoose, { Schema } from 'mongoose';
-import { EntitiesFileSet, getFileGroup } from './files';
-import { createLogger } from './log';
+import { DbAdapter } from '../db';
+import { EntitiesFileSet, getFileGroup } from '../files';
+import { createLogger } from '../log';
+import { createCrudHandlers } from './controllers';
 
 const log = createLogger({ file: __filename });
 
@@ -141,36 +143,49 @@ function createMongooseSchema({ properties }: any, modelFile: any) {
   return newSchema;
 }
 
-/**
- * Register model in mongoose instance
- * @param {Schema} schema mongoose schema
- * @param {string} name schema name
- * @returns {mongoose.Model<any>} mongoose model
- */
-function registerMongooseModel(schema: Schema, name: string) {
-  return mongoose.model(name, schema);
-}
-
 export type ModelsSet = { [key: string]: mongoose.Model<any> };
 
-/**
- * Creates Mongoose Models from Mongoose schemas
- * @returns {any} models
- */
-export function loadMongooseModels(filesSets: EntitiesFileSet): ModelsSet {
-  const schemaFiles = getFileGroup(filesSets, 'schema');
-  const modelFiles = getFileGroup(filesSets, 'model');
-  const schemas = mapSchemasType(_.cloneDeep(schemaFiles));
-  const models: ModelsSet = {};
+export class MongooseDB implements DbAdapter {
+  public type = 'mongoose';
 
-  for (const key in schemas) {
-    const schema = schemas[key];
-    const model = modelFiles[key];
+  public mongoose: mongoose.Mongoose;
 
-    models[key] = registerMongooseModel(createMongooseSchema(schema, model), key);
+  public models: ModelsSet = {};
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  constructor(mongoose: mongoose.Mongoose) {
+    this.mongoose = mongoose;
   }
 
-  return models;
+  public async connect(): Promise<mongoose.Connection> {
+    return this.mongoose.connection.asPromise();
+  }
+
+  /**
+   * Creates Mongoose Models from Mongoose schemas
+   * @returns {this} models
+   */
+  public loadModels(filesSets: EntitiesFileSet) {
+    const schemaFiles = getFileGroup(filesSets, 'schema');
+    const modelFiles = getFileGroup(filesSets, 'model');
+    const schemas = mapSchemasType(_.cloneDeep(schemaFiles));
+
+    for (const key in schemas) {
+      const schema = schemas[key];
+      const model = modelFiles[key];
+
+      this.models[key] = this.mongoose.model(key, createMongooseSchema(schema, model));
+    }
+    return this;
+  }
+
+  public getModel(name: string) {
+    return this.models[name];
+  }
+
+  public createCrudHandlers(modelName: string) {
+    return createCrudHandlers(this.models[modelName]);
+  }
 }
 
 export default {};

@@ -1,16 +1,16 @@
-import { defaultResponse } from "../src/controllers";
+import { defaultResponse } from '../src/services/mongoose/controllers';
 
 const req = {
-    body: {},
-    query: {}
-  },
-  res: any = {
-    status: jest.fn(() => res),
-    send: jest.fn()
-  },
-  data = { prop: 'value' },
-  modelInstance = { save: jest.fn() },
-  model: any = jest.fn(() => modelInstance);
+  body: {},
+  query: {}
+};
+const res: any = {
+  status: jest.fn(() => res),
+  send: jest.fn()
+};
+const data = { prop: 'value' };
+const modelInstance = { save: jest.fn() };
+const model: any = jest.fn(() => modelInstance);
 
 model.find = jest.fn();
 model.findById = jest.fn();
