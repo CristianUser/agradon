@@ -1,20 +1,4 @@
 /* eslint-disable global-require */
-/* eslint-disable consistent-return */
-/* eslint-disable import/no-dynamic-require */
-/**
- * Try to require a filePath
- * @param {string} filePath
- * @returns {Object} module required
- */
-export function tryRequire(filePath: string) {
-  try {
-    require.resolve(filePath);
-  } catch (ex) {
-    return;
-  }
-
-  return require(filePath);
-}
 
 /**
  * Convert Windows backslash paths to slash paths: `foo\\bar` ➔ `foo/bar`.

@@ -9,22 +9,22 @@ function printContext(context: any) {
 }
 
 function info(message: string, context: any) {
-  console.log(('INFO:' as any).green, `[${new Date().toISOString()}]`, message);
+  console.info(('INFO:' as any).green, `[${new Date().toISOString()}]`, message);
   printContext(context);
 }
 
 function error(message: string, context: any) {
-  console.log(('ERROR:' as any).red, `[${new Date().toISOString()}]`, message);
+  console.error(('ERROR:' as any).red, `[${new Date().toISOString()}]`, message);
   printContext(context);
 }
 
 function warn(message: string, context: any) {
-  console.log(('WARN:' as any).yellow, `[${new Date().toISOString()}]`, message);
+  console.warn(('WARN:' as any).yellow, `[${new Date().toISOString()}]`, message);
   printContext(context);
 }
 
 function debug(message: string, context: any = {}) {
-  console.log(('DEBUG:' as any).blue, `[${new Date().toISOString()}]`, message);
+  console.debug(('DEBUG:' as any).blue, `[${new Date().toISOString()}]`, message);
   printContext(context);
 }
 

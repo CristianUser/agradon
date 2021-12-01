@@ -20,4 +20,4 @@ export abstract class DbAdapter {
   public createCrudHandlers(modelName: string) {}
 }
 
-export default DbAdapter;
+export default {};
