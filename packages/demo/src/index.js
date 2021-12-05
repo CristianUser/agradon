@@ -3,16 +3,23 @@ const express = require('express');
 const agradon = require('@agradon/core');
 const { SequelizeDB } = require('@agradon/sequelize-db');
 const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
 
-const { createLogger } = agradon;
+const { createLogger, MongooseDB } = agradon;
 
 const log = createLogger({ file: __filename });
 const app = express();
 
 app.use(require('cors')());
 
-async function build() {
-  const dbInstance = new Sequelize(process.env.DATABASE_URL, {
+async function getDb() {
+  if (process.env.DB_TYPE === 'mongoose') {
+    const mongooseInstance = await mongoose.connect(process.env.MONGODB_URI);
+
+    return new MongooseDB(mongooseInstance);
+  }
+
+  const dbInstance = new Sequelize(process.env.PG_URL, {
     logging: false,
     dialectOptions: {
       useUTC: false
@@ -20,9 +27,15 @@ async function build() {
     timezone: '-04:00'
   });
 
+  return new SequelizeDB(dbInstance);
+}
+
+async function build() {
+  const db = await getDb();
+
   await agradon.init({
     app,
-    db: new SequelizeDB(dbInstance),
+    db,
     rootPath: '/api'
   });
 

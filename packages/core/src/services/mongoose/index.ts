@@ -7,7 +7,7 @@ import mongoose, { Schema } from 'mongoose';
 import { DbAdapter } from '../db';
 import { EntitiesFileSet, getFileGroup } from '../files';
 import { createLogger } from '../log';
-import { createCrudHandlers } from './controllers';
+import { MongooseRepository } from './repository';
 
 const log = createLogger({ file: __filename });
 
@@ -117,8 +117,8 @@ function setDefaultHooks(schema: Schema) {
  * @param {string} schemaKey schema name from the folder
  */
 function setSchemaHooks(schema: Schema, modelFile: any) {
-  if (_.get(modelFile, 'schema') && typeof modelFile.schema === 'function') {
-    const schemaResult = modelFile.schema(schema); // execute schema file hook
+  if (modelFile && typeof modelFile === 'function') {
+    const schemaResult = modelFile(schema, {}); // execute schema file hook
 
     // verify if schema file is returning the schema
     if (schemaResult) {
@@ -146,7 +146,7 @@ function createMongooseSchema({ properties }: any, modelFile: any) {
 export type ModelsSet = { [key: string]: mongoose.Model<any> };
 
 export class MongooseDB implements DbAdapter {
-  repositories: { [key: string]: any } = {};
+  repositories: { [key: string]: MongooseRepository } = {};
 
   public type = 'mongoose';
 

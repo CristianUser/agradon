@@ -201,14 +201,15 @@ export class SequelizeDB extends DbAdapter {
    */
   public loadModels(filesSets: EntitiesFileSet) {
     const schemaFiles = getFileGroup(filesSets, 'schema');
-    // const modelFiles = getFileGroup(filesSets, 'model');
+    const modelFiles = getFileGroup(filesSets, 'model');
     const { schemas, associations } = mapSchemasType(_.cloneDeep(schemaFiles));
 
     for (const key in schemas) {
       const schema = schemas[key];
-      // const model = modelFiles[key];
+      const model = modelFiles[key];
 
       this.models[key] = this.connection.define(key, schema.properties);
+      model?.(this.models[key], this);
       this.repositories[key] = new SequelizeRepository(this.models[key]);
     }
 

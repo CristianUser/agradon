@@ -5,14 +5,14 @@ start-server:
 	npm run start:dev
 
 start-services:
-	docker compose up -d db
+	docker compose up -d postgres mongo
 
 stop-services:
-	docker compose stop db
+	docker compose stop postgres mongo
 
 remove-containers:
 	@echo "Removing all stopped containers..."
-	docker-compose rm db
+	docker-compose rm postgres mongo
 
 burn:
 	@echo "Stopping and removing all containers..."

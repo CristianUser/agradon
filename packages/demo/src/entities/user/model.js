@@ -1,3 +1,3 @@
-module.exports.schema = schema => {
-  return schema;
+module.exports = (model, db) => {
+  console.log('db.type', db.type);
 };
