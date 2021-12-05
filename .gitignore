@@ -10,7 +10,7 @@ update.bat
 .eslintcache
 
 # dependencies
-/node_modules
+node_modules
 /images/*
 package-lock.json
 

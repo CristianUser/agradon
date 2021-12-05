@@ -1,88 +1,32 @@
 {
   "name": "agradon",
-  "version": "1.0.0-alpha.7",
-  "description": "Express Middleware for automatic generation of the models, controllers, and routes with MongoDB.",
-  "main": "lib/index.js",
-  "scripts": {
-    "watch": "nodemon",
-    "build": "tsc -p tsconfig.build.json",
-    "lint": "eslint .",
-    "test": "jest",
-    "clean": "rimraf lib",
-    "prepublishOnly": "npm run clean && npm run build"
+  "version": "1.0.0",
+  "description": "[![Coverage Status](https://coveralls.io/repos/github/CristianUser/agradon/badge.svg?branch=master)](https://coveralls.io/github/CristianUser/agradon?branch=master)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
   },
-  "author": "cristianuser",
-  "license": "MIT",
+  "dependencies": {
+    "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "lerna": "lerna",
+    "preparePublish": "git clean -dfx && npm ci && npm run init && npm run clean && npm run build && npm run test",
+    "init": "lerna bootstrap --hoist",
+    "build": "lerna run build",
+    "clean": "lerna run clean",
+    "test": "lerna run test",
+    "test-cov": "lerna run test-cov",
+    "lint": "eslint 'packages/**/*.{ts,tsx}' -c ./eslintrc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CristianUser/agradon.git"
   },
-  "dependencies": {
-    "colors": "^1.4.0",
-    "express": "^4.17.1",
-    "glob": "^7.1.7",
-    "js-yaml": "^4.1.0",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
-  },
-  "devDependencies": {
-    "@types/glob": "^7.1.4",
-    "@types/jest": "^26.0.24",
-    "@types/js-yaml": "^4.0.3",
-    "@types/jsonwebtoken": "^8.5.5",
-    "@types/lodash": "^4.14.172",
-    "@types/passport": "^1.0.7",
-    "@types/validator": "^13.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.28.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^4.2.3",
-    "jest": "^27.0.6",
-    "lint-staged": "^10.0.8",
-    "mongoose": "^6.0.5",
-    "nodemon": "^2.0.12",
-    "prettier": "^2.3.1",
-    "rimraf": "^3.0.2",
-    "sequelize": "^6.12.0-alpha.1",
-    "ts-jest": "^27.0.3",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
-  },
-  "peerDependencies": {
-    "mongoose": "^6.0.5",
-    "sequelize": "^6.12.0-alpha.1"
-  },
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/CristianUser/agradon/issues"
   },
-  "homepage": "https://github.com/CristianUser/agradon#readme",
-  "directories": {
-    "lib": "lib",
-    "auth": "auth"
-  },
-  "keywords": [
-    "agradon",
-    "express",
-    "mongoose",
-    "mongo",
-    "crud",
-    "generator",
-    "backend",
-    "schema"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix"
-  }
+  "homepage": "https://github.com/CristianUser/agradon#readme"
 }

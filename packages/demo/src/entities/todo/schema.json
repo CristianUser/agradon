@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "content": {
+      "type": "string"
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "completedDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "author": {
+      "$ref": "#/schemas/user"
+    }
+  },
+  "required": [
+    "content"
+  ]
+}

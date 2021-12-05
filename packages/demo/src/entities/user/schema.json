@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "todos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/schemas/todo",
+        "as": "author"
+      }
+    }
+  },
+  "required": [
+    "email",
+    "password"
+  ]
+}
