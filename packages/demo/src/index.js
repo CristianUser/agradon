@@ -2,10 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const agradon = require('@agradon/core');
 const { SequelizeDB } = require('@agradon/sequelize-db');
+const { MongooseDB } = require('@agradon/mongoose-db');
 const Sequelize = require('sequelize');
 const mongoose = require('mongoose');
 
-const { createLogger, MongooseDB } = agradon;
+const { createLogger } = agradon;
 
 const log = createLogger({ file: __filename });
 const app = express();

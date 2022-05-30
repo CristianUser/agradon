@@ -4,9 +4,7 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import mongoose, { Schema } from 'mongoose';
-import { DbAdapter } from '../db';
-import { EntitiesFileSet, getFileGroup } from '../files';
-import { createLogger } from '../log';
+import { DbAdapter, EntitiesFileSet, getFileGroup, createLogger } from '@agradon/core';
 import { MongooseRepository } from './repository';
 
 const log = createLogger({ file: __filename });

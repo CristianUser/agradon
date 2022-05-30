@@ -112,9 +112,9 @@ function parseSchemaField(
         delete schemaFile[fieldKey];
       }
     } else {
-      _.set(schemaFile, `${fieldKey}.type`, getSchemaType(field.type));
-      if (field.default) {
-        _.set(schemaFile, `${fieldKey}.defaultValue`, field.default);
+      field.type = getSchemaType(field.type);
+      if (typeof field.default !== 'undefined') {
+        field.defaultValue = field.default;
         delete field.default;
       }
     }

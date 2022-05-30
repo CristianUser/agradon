@@ -3,6 +3,6 @@
 
 /node_modules
 /dist
-mongo/data
+mongo
 .env
 package-lock.json

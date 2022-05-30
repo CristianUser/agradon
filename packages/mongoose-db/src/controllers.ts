@@ -5,7 +5,7 @@ const {
   resolveProjection,
   resolvePagination,
   applyMethods
-} = require('../../query');
+} = require('@agradon/core');
 
 /**
  * Send a default response

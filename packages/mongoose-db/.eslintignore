@@ -1,0 +1,5 @@
+public/*
+lib/*
+node_modules/
+
+**/*.test.js

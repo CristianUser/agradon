@@ -1,6 +1,5 @@
-/* eslint-disable class-methods-use-this */
 import { Model } from 'mongoose';
-import { ModelRepository } from '../db';
+import { ModelRepository } from '@agradon/core';
 
 type FindQuery = {
   where: any;
