@@ -3,10 +3,10 @@ import { Model } from 'mongoose';
 import { ModelRepository } from '../db';
 
 type FindQuery = {
-  where?: any;
-  sortBy?: any[];
-  limit?: number;
-  offset?: number;
+  where: any;
+  sortBy: any[];
+  limit: number;
+  offset: number;
 };
 
 export class MongooseRepository extends ModelRepository<Model<any>> {
@@ -19,11 +19,19 @@ export class MongooseRepository extends ModelRepository<Model<any>> {
     return newDocument.save();
   }
 
-  find({ where, sortBy, offset = 0, limit = 10 }: FindQuery): Promise<any> {
-    return this.model
-      .find(where, { skip: offset, limit })
-      .sort(sortBy)
+  async find({ where, sortBy, offset = 0, limit = 10 }: Partial<FindQuery>): Promise<any> {
+    const sort: any = sortBy?.map(
+      (item) => Object.entries(item).map(([key, value = 'asc']) => [key, value])[0]
+    );
+    const rows = await this.model
+      .find(where)
+      .limit(limit)
+      .skip(offset)
+      .sort(sort)
       .then((res) => res);
+    const count = await this.model.countDocuments(where).then((res) => res);
+
+    return { count, rows };
   }
 
   findById(id: string): Promise<any> {

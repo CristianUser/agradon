@@ -45,8 +45,8 @@ export function createCrudHandlers(repository: ModelRepository<any>) {
    * @returns {Promise}
    */
   controller.get = ({ query }: any, res: any) => {
-    const { sortBy } = parseQueryMethod(query, 'sortBy');
-    const { match } = parseQueryMethod(query, 'match');
+    const { sortBy } = parseQueryMethod(query, 'sortBy') || {};
+    const { match } = parseQueryMethod(query, 'match') || {};
     // const args = resolveArguments(query);
     const { limit, skip } = resolvePagination(query) || {};
 

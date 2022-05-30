@@ -1,5 +1,5 @@
 import { ModelRepository } from '@agradon/core';
-import { Model, ModelCtor } from 'sequelize';
+import { Model, ModelStatic } from 'sequelize';
 
 type FindQuery = {
   where?: any;
@@ -8,8 +8,8 @@ type FindQuery = {
   offset?: number;
 };
 
-export class SequelizeRepository extends ModelRepository<ModelCtor<Model>> {
-  public model!: ModelCtor<Model>;
+export class SequelizeRepository extends ModelRepository<ModelStatic<Model>> {
+  public model!: ModelStatic<Model>;
 
   async create(data: any): Promise<any> {
     const newDocument = await this.model.create(data);

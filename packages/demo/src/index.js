@@ -43,6 +43,15 @@ async function build() {
     res.status(404).send('Not Found');
   });
 
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, _next) => {
+    log.error(err.message);
+    res.status(500).send({
+      message: 'Internal Server Error',
+      error: err
+    });
+  });
+
   app.listen(process.env.PORT, () =>
     log.info(`Server is listening on port ${process.env.PORT}`, {
       port: Number(process.env.PORT),

@@ -4,7 +4,8 @@
       "type": "string"
     },
     "completed": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "completedDate": {
       "type": "string",

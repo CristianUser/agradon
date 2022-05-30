@@ -118,7 +118,7 @@ function setDefaultHooks(schema: Schema) {
  */
 function setSchemaHooks(schema: Schema, modelFile: any) {
   if (modelFile && typeof modelFile === 'function') {
-    const schemaResult = modelFile(schema, {}); // execute schema file hook
+    const schemaResult = modelFile(schema, { type: 'mongoose' }); // execute schema file hook
 
     // verify if schema file is returning the schema
     if (schemaResult) {
@@ -177,6 +177,7 @@ export class MongooseDB implements DbAdapter {
       const model = modelFiles[key];
 
       this.models[key] = this.mongoose.model(key, createMongooseSchema(schema, model));
+      this.repositories[key] = new MongooseRepository(this.models[key]);
     }
     return this;
   }

@@ -4,7 +4,7 @@
 /* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 import { DbAdapter, EntitiesFileSet, getFileGroup, createLogger } from '@agradon/core';
-import { Sequelize, Model, DataTypes, ModelCtor, Op } from 'sequelize';
+import { Sequelize, Model, DataTypes, ModelStatic, Op } from 'sequelize';
 import { SequelizeRepository } from './repository';
 
 const log = createLogger({ file: __filename });
@@ -113,6 +113,10 @@ function parseSchemaField(
       }
     } else {
       _.set(schemaFile, `${fieldKey}.type`, getSchemaType(field.type));
+      if (field.default) {
+        _.set(schemaFile, `${fieldKey}.defaultValue`, field.default);
+        delete field.default;
+      }
     }
   } else if (_.get(field, '$ref')) {
     const schema = field.$ref.split('/').pop();
@@ -173,7 +177,7 @@ function mapSchemasType(schemas: any) {
   return { schemas, associations };
 }
 
-type ModelsSet = { [key: string]: ModelCtor<Model<any>> };
+type ModelsSet = { [key: string]: ModelStatic<Model<any>> };
 
 export class SequelizeDB extends DbAdapter {
   public type = 'sequelize';

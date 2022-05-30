@@ -13,7 +13,8 @@
     "src/**/*"
   ],
   "exclude": [
-    "test/**/*"
+    "test/**/*",
+    "node_modules/**/*"
   ],
   "types": ["jest"]
 }
