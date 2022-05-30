@@ -1,4 +1,4 @@
-const { verifyAuth } = require('@agradon/core');
+const { verifyAuth } = require('@agradon/auth');
 
 module.exports = router => {
   router.get('/me', verifyAuth(), (req, res) => {

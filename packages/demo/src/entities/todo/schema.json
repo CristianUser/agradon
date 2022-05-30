@@ -17,5 +17,8 @@
   },
   "required": [
     "content"
-  ]
+  ],
+  "_auth": {
+    "post": true
+  }
 }

@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,                   /* Generates corresponding '.d.ts' file. */
+    "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    "removeComments": true,                /* Do not emit comments to output. */
+    "resolveJsonModule": true,
+    "outDir": "lib",
+    "skipLibCheck": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "test/**/*",
+    "node_modules/**/*"
+  ],
+  "types": ["jest"]
+}

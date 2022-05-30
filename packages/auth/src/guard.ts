@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FileGroup } from '../../services/files';
+import { FileGroup } from '@agradon/core';
 import { verifyAuth } from './utils';
 
 /**

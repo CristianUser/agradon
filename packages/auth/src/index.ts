@@ -1,9 +1,7 @@
 /* eslint-disable no-param-reassign */
+import { AgradonConfig, AgradonPlugin, EntitiesFileSet, getFileGroup } from '@agradon/core';
 import { Router } from 'express';
 import passport from 'passport';
-import { AgradonConfig } from '../../init';
-import { EntitiesFileSet, getFileGroup } from '../../services/files';
-import { AgradonPlugin } from '../base';
 import guard from './guard';
 import routes from './routes';
 import defaultStrategies from './strategies';
@@ -50,12 +48,15 @@ export class AuthPlugin extends AgradonPlugin {
   constructor(config: any = {}) {
     super();
     const parsedConfig: any = {
-      strategies: defaultStrategies(),
+      strategies: [],
       userModel: 'User',
       enableRoutes: true,
       ...config
     };
-    parsedConfig.strategies = mergeStrategies(defaultStrategies(), config.strategies);
+    parsedConfig.strategies = mergeStrategies(
+      defaultStrategies({ db: parsedConfig.db, userModel: parsedConfig.userModel }),
+      config.strategies
+    );
     this.config = parsedConfig;
   }
 

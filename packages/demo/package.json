@@ -12,6 +12,7 @@
   "author": "cristianuser",
   "license": "ISC",
   "dependencies": {
+    "@agradon/auth": "0.0.1",
     "@agradon/core": "^1.0.0-alpha.7",
     "@agradon/mongoose-db": "0.0.1",
     "@agradon/sequelize-db": "0.0.1",

@@ -1,12 +1,12 @@
 require('dotenv').config();
-const express = require('express');
-const agradon = require('@agradon/core');
-const { SequelizeDB } = require('@agradon/sequelize-db');
+const { AuthPlugin } = require('@agradon/auth');
+const { createLogger } = require('@agradon/core');
 const { MongooseDB } = require('@agradon/mongoose-db');
-const Sequelize = require('sequelize');
+const { SequelizeDB } = require('@agradon/sequelize-db');
+const agradon = require('@agradon/core');
+const express = require('express');
 const mongoose = require('mongoose');
-
-const { createLogger } = agradon;
+const Sequelize = require('sequelize');
 
 const log = createLogger({ file: __filename });
 const app = express();
@@ -37,6 +37,7 @@ async function build() {
   await agradon.init({
     app,
     db,
+    plugins: [new AuthPlugin()],
     rootPath: '/api'
   });
 
