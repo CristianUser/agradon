@@ -17,7 +17,7 @@
     "clean": "lerna run clean",
     "test": "lerna run test",
     "test-cov": "lerna run test-cov",
-    "lint": "eslint 'packages/**/*.{ts,tsx}' -c ./eslintrc"
+    "lint": "lerna run lint"
   },
   "repository": {
     "type": "git",

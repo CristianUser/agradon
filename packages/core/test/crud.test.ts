@@ -1,4 +1,4 @@
-import { createCrudHandlers } from '../src/services/mongoose/controllers';
+import { createCrudHandlers } from '../src/services/controllers';
 import { createCrudRoutes, createDefaultCRUD } from '../src/crud';
 
 jest.mock('./controllers');

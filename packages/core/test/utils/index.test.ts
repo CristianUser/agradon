@@ -1,8 +1,8 @@
-const index = require('./index');
+const index = require('../../src/index');
 
 describe('utils/index.js', () => {
-  const fakePath = '/src/schemas/user/schema.yml',
-    windowsPath = '\\src\\schemas\\user\\schema.yml';
+  const fakePath = '/src/schemas/user/schema.yml';
+  const windowsPath = '\\src\\schemas\\user\\schema.yml';
 
   test('should return the schema name', () => {
     expect(index.getEntityName(fakePath)).toBe('user');

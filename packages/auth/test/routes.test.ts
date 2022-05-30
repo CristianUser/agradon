@@ -1,9 +1,10 @@
-const routes = require('./routes'),
-  passport = require('passport'),
-  router = {
-    get: jest.fn(),
-    post: jest.fn()
-  };
+const passport = require('passport');
+const routes = require('../src/routes');
+
+const router = {
+  get: jest.fn(),
+  post: jest.fn()
+};
 
 jest.mock('passport');
 
@@ -33,15 +34,15 @@ describe('auth/routes.js', () => {
 
   describe('localRoute', () => {
     test('should call router and passport', () => {
-      const req = { login: jest.fn() },
-        res = {
-          status: jest.fn(() => res),
-          json: jest.fn(() => res),
-          send: jest.fn(() => res)
-        },
-        user = {
-          name: 'user'
-        };
+      const req = { login: jest.fn() };
+      const res = {
+        status: jest.fn(() => res),
+        json: jest.fn(() => res),
+        send: jest.fn(() => res)
+      };
+      const user = {
+        name: 'user'
+      };
 
       passport.authenticate.mockReturnValue(jest.fn());
 

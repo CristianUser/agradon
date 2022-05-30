@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 jest.mock('./services/database');
 jest.mock('./models');
 jest.mock('./utils');
 
-const lib = require('./init'),
-  models = require('./models'),
-  utils = require('./utils'),
-  app = {
-    use: jest.fn(),
-    set: jest.fn()
-  },
-  req: any = {},
-  res: any = {
-    set: jest.fn()
-  };
+const lib = require('../src/init');
+const utils = require('../src/services/utils');
+
+const app = {
+  use: jest.fn(),
+  set: jest.fn()
+};
+const req: any = {};
+const res: any = {
+  set: jest.fn()
+};
 
 describe('lib/index.js', () => {
   describe('setMiddlewares', () => {
@@ -37,7 +39,6 @@ describe('lib/index.js', () => {
     });
 
     test("shouldn't call app.use", () => {
-      models.createMongooseModels.mockReturnValue({});
       lib.registerRoutes({ app });
 
       expect(app.use.mock.calls.length).toBe(0);
@@ -59,10 +60,10 @@ describe('lib/index.js', () => {
 
   describe('registerPlugins', () => {
     test('should call plugin', () => {
-      const plugin = jest.fn(),
-        mongooseMock = {
-          model: jest.fn()
-        };
+      const plugin = jest.fn();
+      const mongooseMock = {
+        model: jest.fn()
+      };
 
       lib.registerPlugins([plugin], app, mongooseMock);
 

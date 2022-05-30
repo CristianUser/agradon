@@ -1,4 +1,4 @@
-import { defaultResponse } from '../src/services/mongoose/controllers';
+import { defaultResponse } from '../src/services/controllers';
 
 const req = {
   body: {},

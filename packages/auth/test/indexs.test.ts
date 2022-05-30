@@ -5,16 +5,17 @@ jest.mock('./strategies');
 jest.mock('mongoose');
 jest.mock('passport');
 
-const auth = require('./index'),
-  routes = require('./routes'),
-  guard = require('./guard'),
-  passport = require('passport'),
-  defaultStrategies = require('./strategies'),
-  config = {
-    strategies: [],
-    userModel: 'User',
-    enableRoutes: true
-  };
+const passport = require('passport');
+const auth = require('../src/index');
+const routes = require('../src/routes');
+const guard = require('../src/guard');
+const defaultStrategies = require('../src/strategies');
+
+const config = {
+  strategies: [],
+  userModel: 'User',
+  enableRoutes: true
+};
 // const router = {
 //     get: jest.fn(),
 //     post: jest.fn(),

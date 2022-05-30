@@ -7,21 +7,21 @@
 //     delete: jest.fn()
 //   };
 const schemas = {
-    something: {
-      _schema: {
-        usename: 'String'
-      },
-      _auth: {
-        post: true,
-        get: true
-      }
+  something: {
+    _schema: {
+      usename: 'String'
     },
-    another: {
-      _schema: {
-        prop: 'String'
-      }
+    _auth: {
+      post: true,
+      get: true
     }
-  };
+  },
+  another: {
+    _schema: {
+      prop: 'String'
+    }
+  }
+};
 
 describe('auth/guard.js', () => {
   describe('default', () => {

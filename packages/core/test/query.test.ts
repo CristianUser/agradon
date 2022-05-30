@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const query = require('./query');
+const query = require('../src/query');
 
 describe('lib/query.js', () => {
   const reqQuery = {
