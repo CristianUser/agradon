@@ -1,7 +1,7 @@
 import { createCrudHandlers } from '../src/services/controllers';
 import { createCrudRoutes, createDefaultCRUD } from '../src/crud';
 
-jest.mock('./controllers');
+jest.mock('../src/services/controllers', () => ({ createCrudHandlers: jest.fn() }));
 
 const controller = {
   get: jest.fn(),
@@ -10,7 +10,7 @@ const controller = {
   put: jest.fn(),
   delete: jest.fn()
 };
-const router = {
+const router: any = {
   get: jest.fn(),
   post: jest.fn(),
   put: jest.fn(),
@@ -30,21 +30,26 @@ describe('lib/crud.js', () => {
     });
 
     test("shouldn't create routes", () => {
-      createCrudRoutes(router);
+      router.get.mockClear();
+      router.post.mockClear();
+      router.put.mockClear();
+      router.delete.mockClear();
+      createCrudRoutes(router, {});
 
-      expect(router.get.mock.calls.length).toBe(0);
-      expect(router.post.mock.calls.length).toBe(0);
-      expect(router.put.mock.calls.length).toBe(0);
-      expect(router.delete.mock.calls.length).toBe(0);
+      expect(router.get).not.toBeCalled();
+      expect(router.post).not.toBeCalled();
+      expect(router.put).not.toBeCalled();
+      expect(router.delete).not.toBeCalled();
     });
   });
 
   describe('createDefaultCRUD', () => {
     test('should create routes', () => {
-      createCrudHandlers.mockReturnValue(controller);
-      createDefaultCRUD(router);
+      const dbMock: any = { getRepository: jest.fn() };
+      (createCrudHandlers as any).mockReturnValue(controller);
+      createDefaultCRUD(router, 'user', dbMock);
 
-      expect(createCrudHandlers.mock.calls.length).toBe(1);
+      expect(createCrudHandlers).toBeCalled();
     });
   });
 });

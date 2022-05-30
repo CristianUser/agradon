@@ -11,18 +11,19 @@ jobs:
 
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 12.13.0
+    - name: Use Node.js 14.19.1
       uses: actions/setup-node@v1
       with:
-        node-version: 12.13.0
+        node-version: 14.19.1
 
     - name: npm install, make test-coverage
+      working-directory: ./packages/core
       run: |
         npm install
-        npm run init
         npm run test
 
     - name: Coveralls
+      working-directory: ./packages/core
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}

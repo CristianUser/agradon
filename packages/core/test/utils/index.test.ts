@@ -1,4 +1,4 @@
-const index = require('../../src/index');
+const index = require('../../src/services/utils');
 
 describe('utils/index.js', () => {
   const fakePath = '/src/schemas/user/schema.yml';

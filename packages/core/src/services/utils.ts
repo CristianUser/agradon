@@ -5,7 +5,7 @@
  * @param {string} path - A Windows backslash path.
  * @returns {string} A path with forward slashes.
  */
-function standarizePath(path: string) {
+export function standarizePath(path: string) {
   const isExtendedLengthPath = /^\\\\\?\\/.test(path);
   // eslint-disable-next-line no-control-regex
   const hasNonAscii = /[^\u0000-\u0080]+/.test(path);
